@@ -108,13 +108,10 @@ cody1.txt	cody2.txt	sub
 
 ### 4-3. 파일 내용 확인 / 빈 파일 생성
 ```bash
-touch empty.txt
-cat {{파일명}}
-```
-
-### 결과
-```bash
-{{출력}}
+% touch empty.txt # 빈 파일 생성
+% echo "test" > empty.txt # 파일 내용 확인
+% cat empty.txt 
+test
 ```
 
 ---
