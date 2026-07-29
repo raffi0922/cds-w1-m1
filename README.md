@@ -119,33 +119,27 @@ test
 ## 5. 권한 실습
 
 ### 5-1. 파일 권한 확인 및 변경
+소유자(user), 그룹(group), 다른사용자(others)
+(7) = 읽기(4), 쓰기(2), 실행(1) 모든 권한
 대상 파일: `{{파일명}}`
 
 ```bash
-ls -l {{파일명}}
-chmod 644 {{파일명}}
-ls -l {{파일명}}
-chmod 755 {{파일명}}
-ls -l {{파일명}}
-```
-
-### 변경 전/후
-```bash
-{{출력}}
+% ls -l empty.txt # 644 
+-rw-r--r--  1 hyeonmo90922  hyeonmo90922  5  7 29 16:59 empty.txt
+% chmod 755 empty.txt # 권한 변경 755
+% ls -l empty.txt    
+-rwxr-xr-x  1 hyeonmo90922  hyeonmo90922  5  7 29 16:59 empty.txt
 ```
 
 ### 5-2. 디렉토리 권한 확인 및 변경
 대상 디렉토리: `{{디렉토리명}}`
 
 ```bash
-ls -ld {{디렉토리명}}
-chmod 755 {{디렉토리명}}
-ls -ld {{디렉토리명}}
-```
-
-### 변경 전/후
-```bash
-{{출력}}
+% ls -ld cody        
+drwxr-xr-x  4 hyeonmo90922  hyeonmo90922  128  7 29 16:40 cody
+% chmod 755 cody
+% ls -ld cody
+drwxr-xr-x  4 hyeonmo90922  hyeonmo90922  128  7 29 16:40 cody
 ```
 
 ---
