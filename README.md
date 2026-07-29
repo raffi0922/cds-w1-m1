@@ -103,7 +103,6 @@ cody1.txt	cody2.txt
 % mkdir sub # 디렉토리 생성
 % ls
 cody1.txt	cody2.txt	sub
-% cd sub # 디렉토리 이동
 % rm -r sub # 디렉토리 삭제
 ```
 
