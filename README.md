@@ -16,11 +16,11 @@
 
 ## 2. 실행 환경
 
-- OS: `{{예: macOS / Ubuntu 22.04}}`
-- Shell: `{{예: zsh / bash}}`
-- Terminal: `{{예: iTerm2 / Terminal / VSCode Terminal}}`
-- Docker: `{{예: OrbStack / Docker Desktop / Docker CLI 버전}}`
-- Git: `{{예: git version 2.xx.x}}`
+- OS: `macOS`
+- Shell: `bash zsh`
+- Terminal: `Terminal`
+- Docker: `OrbStack, Docker version 28.5.2`
+- Git: `git version 2.53.0`
 
 ### 버전 확인 명령
 ```bash
@@ -34,7 +34,18 @@ git config --list
 
 ### 결과
 ```bash
-{{실제 출력 붙여넣기}}
+% uname -a
+Darwin /RELEASE_X86_64 x86_64
+% git --version
+git version 2.53.0
+% docker --version
+Docker version 28.5.2, build ecc6942
+% echo $SHELL
+/bin/zsh
+% docker info
+Client:
+ Version:    28.5.2
+ Context:    orbstack
 ```
 
 ---
@@ -66,30 +77,34 @@ git config --list
 
 ### 4-1. 현재 위치 확인 / 목록 확인
 ```bash
-pwd
-ls
-ls -la
-```
-
-### 결과
-```bash
-{{출력}}
+% pwd
+/Users/hyeonmo90922/proejct
+% ls
+README.md
+% ls -al
+total 24
+drwxr-xr-x   4 hyeonmo90922  hyeonmo90922   128  7 29 15:17 .
+drwxr-xr-x   5 hyeonmo90922  hyeonmo90922   160  7 29 15:41 ..
+drwxr-xr-x  12 hyeonmo90922  hyeonmo90922   384  7 29 15:43 .git
+-rw-r--r--@  1 hyeonmo90922  hyeonmo90922  8694  7 29 16:11 README.md
 ```
 
 ### 4-2. 디렉토리 이동 / 생성 / 복사 / 이름 변경 / 삭제
 ```bash
-mkdir -p {{디렉토리명}}
-cd {{디렉토리명}}
-touch {{파일명}}
-cp {{원본파일}} {{복사파일}}
-mv {{이전이름}} {{새이름}}
-rm {{삭제파일}}
-rm -r {{삭제디렉토리}}
-```
-
-### 결과
-```bash
-{{출력}}
+% mkdir cody # 생성
+% cd cody # 디렉토리 이동
+% touch cody.txt # 생성
+% cp cody.txt cody2.txt # 복사
+% mv cody.txt cody1.txt # 이름 변경
+% ls     
+cody1.txt	cody2.txt
+% cp cody2.txt cody3.txt # 복사
+% rm cody3.txt # 삭제
+% mkdir sub # 디렉토리 생성
+% ls
+cody1.txt	cody2.txt	sub
+% cd sub # 디렉토리 이동
+% rm -r sub # 디렉토리 삭제
 ```
 
 ### 4-3. 파일 내용 확인 / 빈 파일 생성
