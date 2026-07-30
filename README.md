@@ -150,13 +150,21 @@ drwxr-xr-x  4 hyeonmo90922  hyeonmo90922  128  7 29 16:40 cody
 
 ### 6-1. 버전 확인
 ```bash
-docker --version
-docker info
-```
-
-### 결과
-```bash
-{{출력}}
+% docker --version
+Docker version 28.5.2, build ecc6942
+% docker info     
+Client:
+ Version:    28.5.2
+ Context:    orbstack
+ Debug Mode: false
+ Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.29.1
+    Path:     /Users/hyeonmo90922/.docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.40.3
+    Path:     /Users/hyeonmo90922/.docker/cli-plugins/docker-compose
+...(이하생략)
 ```
 
 ### 6-2. 이미지 / 컨테이너 상태 확인
@@ -167,9 +175,7 @@ docker ps -a
 ```
 
 ### 결과
-```bash
-{{출력}}
-```
+![image](./image/6-2_docker_check.png)
 
 ---
 
