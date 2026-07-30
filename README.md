@@ -244,6 +244,26 @@ hello docker
 - `exec`: 실행 중인 컨테이너 안에서 새 명령 실행
 - 종료 후 컨테이너 상태: `{{정리 내용}}`
 
+```bash
+# 먼저 백그라운드에서 계속 실행되는 우분투 컨테이너 시작
+% docker run -d --name ubuntu-running ubuntu:22.04 sleep infinity
+a35cb40f6248e4e60c538afca09ee175d532a2510a730a5ef8ebc29c713c6cef
+% docker ps
+CONTAINER ID   IMAGE          COMMAND            CREATED         STATUS         PORTS     NAMES
+a35cb40f6248   ubuntu:22.04   "sleep infinity"   2 minutes ago   Up 2 minutes             ubuntu-running
+^C
+SIGTERM/SIGINTs, forcefully exiting
+% docker ps
+CONTAINER ID   IMAGE          COMMAND            CREATED         STATUS         PORTS     NAMES
+a35cb40f6248   ubuntu:22.04   "sleep infinity"   6 minutes ago   Up 6 minutes             ubuntu-running
+```
+### 결과
+❓ 왜 컨테이너는 여전히 실행 중인가?
+• sleep 명령어는 SIGINT를 무시하도록 설계됨
+• Docker가 신호를 보냈지만 sleep은 반응 없음
+• attach 세션만 종료, 메인 프로세스는 계속 실행
+• docker ps 확인 → "Up 7 minutes" (계속 실행 중!)
+
 ---
 
 ## 8. Dockerfile 기반 커스텀 이미지
