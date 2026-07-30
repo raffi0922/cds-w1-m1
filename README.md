@@ -218,7 +218,7 @@ hello-world   latest    e2ac70e7319a   4 months ago   10.1kB
 ```
 
 ### 결과
-![image](./image/7-1_docker_check.png)
+![image](./image/7-1.helloworld-image.png)
 
 
 ### 7-2. ubuntu 컨테이너 실행 및 내부 명령 실행
