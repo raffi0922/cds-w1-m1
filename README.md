@@ -121,8 +121,8 @@ test
 ### 5-1. 파일 권한 확인 및 변경
 소유자(user), 그룹(group), 다른사용자(others)
 (7) = 읽기(4), 쓰기(2), 실행(1) 모든 권한
-- '644 rw- r-- r--' : 소유자 수정가능, 나머지 읽기만
-- '755 rwx r-x r-x' : 소유자 수정가능, 나머지 읽기+실행
+- `644 rw- r-- r--` : 소유자 수정가능, 나머지 읽기만
+- `755 rwx r-x r-x` : 소유자 수정가능, 나머지 읽기+실행
 대상 파일: `emmpty.txt`
 
 ```bash
@@ -240,9 +240,17 @@ hello docker
 ![image](./image/7.container_image.png)
 
 ### 7-3. attach / exec / 종료 차이 메모
-- `attach`: 실행 중인 컨테이너의 표준 입출력에 연결
-- `exec`: 실행 중인 컨테이너 안에서 새 명령 실행
-- 종료 후 컨테이너 상태: `{{정리 내용}}`
+`Docker Attach` 동작 방식: 컨테이너 내부의 1번 프로세스(PID 1) 표준 입출력(I/O)에 직접 연결
+
+특징: 컨테이너가 처음 실행될 때 돌던 본래의 화면과 입력을 그대로 공유
+
+주의점: 여기서 Ctrl + C를 누르면 컨테이너 전체가 종료
+
+`Docker Exec` 동작 방식: 실행 중인 컨테이너 내부에서 새로운 프로세스(주로 /bin/bash 등 셸)를 새로 실행하여 접속
+
+특징: 기존 메인 프로세스에 영향을 주지 않고 안전하게 독립된 터미널 세션을 열 수 있습니다
+
+사용 목적: 주로 컨테이너 내부 상태를 확인하거나 디버깅용 셸을 띄울 때 사용합니다
 
 ```bash
 # 먼저 백그라운드에서 계속 실행되는 우분투 컨테이너 시작
@@ -259,27 +267,35 @@ a35cb40f6248   ubuntu:22.04   "sleep infinity"   6 minutes ago   Up 6 minutes   
 ```
 ### 결과
 ❓ 왜 컨테이너는 여전히 실행 중인가?
-• sleep 명령어는 SIGINT를 무시하도록 설계됨
-• Docker가 신호를 보냈지만 sleep은 반응 없음
-• attach 세션만 종료, 메인 프로세스는 계속 실행
-• docker ps 확인 → "Up 7 minutes" (계속 실행 중!)
+- sleep 명령어는 SIGINT를 무시하도록 설계됨
+- Docker가 신호를 보냈지만 sleep은 반응 없음
+- attach 세션만 종료, 메인 프로세스는 계속 실행
+- docker ps 확인 → "Up 7 minutes" (계속 실행 중!)
 
 ---
 
 ## 8. Dockerfile 기반 커스텀 이미지
 
 ### 8-1. 선택한 베이스 이미지
-- 베이스 이미지: `{{예: nginx:alpine / ubuntu:22.04}}`
+- 베이스 이미지: `{{nginx / ubuntu:22.04}}`
+```bash
+# 1. 이미지 다운로드
+% docker pull ubuntu:22.04
+% docker images
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+ubuntu        22.04     b8e6b596a324   4 weeks ago    78.1MB 
+
+```
+
 
 ### 8-2. 커스텀 포인트
-- `{{예: HTML 정적 파일 교체}}`
-- `{{예: 설정 파일 변경}}`
-- `{{예: 환경변수 추가}}`
-- `{{예: 헬스체크 추가}}`
+- `{{HTML 정적 파일 교체}}`
+- `{{설정 파일 변경}}`
+- `{{환경변수 추가}}`
+- `{{헬스체크 추가}}`
 
 ### 8-3. 프로젝트 구조
 ```bash
-{{예시}}
 project/
 ├── Dockerfile
 ├── app/
@@ -289,7 +305,7 @@ project/
 
 ### 8-4. Dockerfile
 ```dockerfile
-{{Dockerfile 내용}}
+
 ```
 
 ### 8-5. 빌드 명령
