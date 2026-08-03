@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # 1. 웹 서버 서비스
+  web:
+    image: nginx:alpine
+    container_name: app-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html
+    networks:
+      - app-network
+
+  # 2. 보조 서비스 (네트워크 통신 테스트용)
+  helper:
+    image: alpine:latest
+    container_name: app-helper
+    # 컨테이너가 바로 종료되지 않도록 대기 상태 유지
+    command: tail -f /dev/null
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

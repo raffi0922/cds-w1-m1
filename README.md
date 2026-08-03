@@ -466,9 +466,16 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 ### 접속 확인 명령
 ```bash
 % curl http://localhost:8080
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+</body>
+</html>
 ```
 
 ### 브라우저 접속 증거
@@ -530,40 +537,46 @@ drwxr-xr-x    1 root     root             8 Jul 15 23:31 ..
 # 컨테이너 확인
 % docker exec my-mount-nginx cat /usr/share/nginx/html/index.html
 <html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-</html>%  
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+</body>
+</html>
 ```
 
 ```bash
 # curl 확인
 % curl http://localhost:8080/ 
 <html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-</html>%  
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+</body>
+</html>
 ```
 
 호스트 파일 변경:
 ```bash
 % cat > site/index.html << 'EOF'
 <html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-호스트파일을 추가로 수정했습니다.
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+<p>호스트에서 파일을 수정하면 실시간으로 반영됩니다.</p>
+</body>
 </html>
-EOF
-% cat site/index.html           
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-호스트파일을 추가로 수정했습니다.
 ```
 
 호스트 파일 변경 후:
@@ -571,24 +584,32 @@ EOF
 # 컨테이너 확인
 % docker exec my-mount-nginx cat /usr/share/nginx/html/index.html
 <html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-호스트파일을 추가로 수정했습니다.
-</html>%  
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+<p>호스트에서 파일을 수정하면 실시간으로 반영됩니다.</p>
+</body>
+</html>
 ```
 
 ```bash
 # curl 확인
 % curl http://localhost:8080/ 
 <html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-호스트파일을 추가로 수정했습니다.
-</html>%  
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+<p>호스트에서 파일을 수정하면 실시간으로 반영됩니다.</p>
+</body>
+</html>
 ```
 
 - 접속 주소: `http://localhost:8080`
@@ -696,7 +717,6 @@ branch.main.merge=refs/heads/main
 branch.main.vscode-merge-base=origin/main
 ```
 
-
 ### 12-2. 저장소 연동
 - GitHub Repository: `https://github.com/raffi0922/cds-w1-m1.git`
 - 원격 저장소 등록:
@@ -707,14 +727,12 @@ origin	https://github.com/raffi0922/cds-w1-m1.git (fetch)
 origin	https://github.com/raffi0922/cds-w1-m1.git (push)
 ```
 
-
 ### 12-3. VSCode GitHub 로그인 연동 증거
 - VSCode GitHub 로그인 완료: `예`
 - VSCode Source Control 연동 확인: `예`
 - 스크린샷
 
 ![vscode_github](./screenshot/12-3.vscode_github.png)
-
 
 ---
 
@@ -723,67 +741,7 @@ origin	https://github.com/raffi0922/cds-w1-m1.git (push)
 ### 13-1. Docker Compose 기초
 - `docker-compose.yml`의 기본 구조를 학습하고, 단일 서비스를 Compose로 실행한다.
 - 배움 포인트: 컨테이너 실행 명령이 “문서화된 실행 설정”으로 바뀌는 이유
-
-```bash
-# 파일 생성
-% cat > docker-compose.yml << 'EOF'
-version: '3.8'
-
-services:
-  web:
-    build: .
-    container_name: compose-web
-    ports:
-      - "8080:80"
-    restart: unless-stopped
-EOF
-```
-
-```bash
-# 컨테이너 실행
- % docker-compose up -d
-WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
-[+] Building 1.2s (9/9) FINISHED
-...
- ✔ Container compose-web      Started   
-```
-
-```bash
-# 컨테이너 확인
-% docker ps        
-CONTAINER ID   IMAGE           COMMAND                   CREATED              STATUS              PORTS                                     NAMES
-cb5a0eb62405   cds-w1-m1-web   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   compose-web
-```
-
-```bash
-# 웹 서버 확인
-% curl http://localhost:8080/
-<html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
-</html>%   
-```
-
-```bash
-# 로그 확인
-% docker-compose logs -f web
-WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
-compose-web  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
-```
-
-```bash
-# 컨테이너 중지
-% docker-compose down
-WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
-[+] Running 2/2
- ✔ Container compose-web      Removed                                                                                               0.4s 
- ✔ Network cds-w1-m1_default  Removed
-% docker ps
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-```
-
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟
 📌 주요 개념
 version: Compose 파일 형식 버전 (3.8 = Docker 19.03+)
 services: 실행할 컨테이너들 정의
@@ -796,13 +754,180 @@ restart: 재시작 정책 (unless-stopped = 수동 중지 전까지 재시작)
 - ✅ 재사용 가능
 - ✅ 버전 관리 가능
 
+1️⃣ index.html 파일 생성
+```bash
+% mkdir compose
+% cd compose
+% cat > index.html << 'EOF'
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX Compose 컨테이너 </title>
+</head>
+<body>
+<h1>Docker Compose 컨테이너 연동 성공!</h1>
+<p>Nginx 웹 서버가 정상적으로 동작합니다.</p>
+</body>
+</html>
+EOF
+```
+
+2️⃣ compose.yml 파일 생성
+```bash
+# 파일 생성
+% cat > ./docker-compose.yml << 'EOF'
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: compose-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html
+    restart: unless-stopped
+EOF
+```
+
+3️⃣ 컨테이너 실행 및 확인
+```bash
+# 컨테이너 실행
+ % ./docker-compose up -d
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Building 1.2s (9/9) FINISHED
+...
+ ✔ Container compose-web      Started   
+```
+
+```bash
+# 컨테이너 확인
+% docker ps        
+CONTAINER ID   IMAGE           COMMAND                   CREATED              STATUS              PORTS                                     NAMES
+cb5a0eb62405   cds-w1-m1-web   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   compose-web
+```
+
+4️⃣ 웹서버 확인  
+```bash
+# 웹 서버 확인
+% curl http://localhost:8080/
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX Compose 컨테이너 </title>
+</head>
+<body>
+<h1>Docker Compose 컨테이너 연동 성공!</h1>
+<p>Nginx 웹 서버가 정상적으로 동작합니다.</p>
+</body>
+</html>  
+```
+5️⃣ 컨테이너 확인
+```bash
+# 컨테이너 확인
+% docker-compose ps
+```
+
+6️⃣ 로그 확인 
+```bash
+# 로그 확인
+% docker-compose logs -f web
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+compose-web  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+```
+
+7️⃣ 컨테이너 중지
+```bash
+# 컨테이너 중지
+% docker-compose down
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 2/2
+ ✔ Container compose-web      Removed                                                                                               0.4s 
+ ✔ Network cds-w1-m1_default  Removed
+% docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
 ### 13-2. Docker Compose 멀티 컨테이너
 - 웹 서버 + (임의의 보조 서비스) 2개 이상을 Compose로 함께 실행한다.
 - 컨테이너 간 네트워크 통신이 가능한지 확인한다.
 - 배움 포인트: 네트워크/서비스 디스커버리 개념 맛보기
 
+1️⃣ index.html 파일 생성
+```bash
+% mkdir compose_multi
+% cd compose_multi
+% cat > index.html << 'EOF'
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX Compose multi컨테이너 </title>
+</head>
+<body>
+<h1>Docker Compose multi 컨테이너 연동 성공!</h1>
+<p>Nginx 웹 서버가 정상적으로 동작합니다.</p>
+</body>
+</html>
+EOF
+```
 
+2️⃣ multi docker-compose 만들기
+```bash
+% cat > ./compose_multi/docker-compose.yml << 'EOF'
+version: '3.8'
 
+services:
+  # 1. 웹 서버 서비스
+  web:
+    image: nginx:alpine
+    container_name: app-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    networks:
+      - app-network
+
+  # 2. 보조 서비스 (네트워크 통신 테스트용)
+  helper:
+    image: alpine:latest
+    container_name: app-helper
+    # 컨테이너가 바로 종료되지 않도록 대기 상태 유지
+    command: tail -f /dev/null
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+EOF
+```
+
+3️⃣ 컨테이너 실행
+```bash
+# 컨테이너 실행
+% docker-compose up -d
+```
+
+4️⃣ 웹 서버 접속 확인
+- curl http://localhost:8080에 접속하여 Docker Compose 멀티 컨테이너 연동 성공! 메시지가 출력되는지 확인
+```bash
+% curl http://localhost:8080
+```
+
+5️⃣ 컨테이너 간 네트워크 통신 확인 (서비스 디스커버리)
+- Docker Compose는 기본적으로 같은 네트워크에 속한 컨테이너끼리 컨테이너 이름(서비스 이름)을 호스트 이름처럼 사용하여 통신
+- helper 컨테이너 내부로 접속하여 web 컨테이너로 통신(ping)이 잘 되는지 테스트
+
+```bash
+% docker-compose exec helper ping -c 3 web
+```
+
+6️⃣ 종료
+```bash
+# 컨테이너 종료
+% docker-compose down
+```
 
 ### 13-3. Compose 운영 명령어 습득
 - `up`, `down`, `ps`, `logs`를 사용해 실행/종료/상태/로그를 관리한다.
@@ -812,16 +937,138 @@ restart: 재시작 정책 (unless-stopped = 수동 중지 전까지 재시작)
 - Dockerfile 또는 Compose에서 환경 변수를 주입해 서버 포트/모드를 바꿔본다.
 - 배움 포인트: 설정과 코드의 분리
 
+1️⃣ .env 파일 작성
+- 프로젝트 환경 변수 값을 정의
+
+```bash
+% mkdir compose_env
+% cd compose_env
+% cat > .env << 'EOF'
+# 서버 포트 및 모드 설정
+SERVER_PORT=8081
+APP_MODE=development
+EOF
+```
+
+2️⃣ docker-compose.yml 작성
+- 환경 변수 파일을 지정하고, 컨테이너 내부로 변수 값을 전달합니다.
+
+```bash
+% cat > docker-compose.yml << 'EOF'
+version: '3.8'
+
+services:
+  app:
+    image: nginx:alpine
+    container_name: compose-env-web
+    ports:
+      - "${SERVER_PORT}:80"
+    environment:
+      - NGINX_MODE=${APP_MODE}
+    # .env 파일을 자동으로 읽어오도록 지정
+    env_file:
+      - .env
+EOF
+```
+
+3️⃣ 컨테이너 실행
+- 작성한 설정 파일들이 있는 디렉토리에서 아래 명령어를 실행
+
+```bash
+%  docker-compose up -d
+```
+
+4️⃣ 환경 변수 주입 확인
+- 포트 확인: .env 파일에 설정한 8090 포트로 브라우저에서 http://localhost:8081에 접속하여 Nginx 화면이 정상 출력되는지 확인.
+- 컨테이너 내부 환경 변수 확인: 컨테이너 내부로 접속하여 주입된 환경 변수 값이 잘 들어왔는지 확인.
+
+```bash
+% curl http://localhost:8081
+
+% docker-compose exec app env
+```
+
+5️⃣ 종료
+- 실습이 끝난 후 컨테이너 종료
+```bash
+% docker-compose down
+```
+
 ### 13-5. GitHub SSH 키 설정
 - HTTPS 대신 SSH로 푸시가 가능하도록 키를 등록하고 동작을 확인한다.
 - 배움 포인트: 인증 방식 차이와 보안 습관
 
----
+1️⃣ 기존 SSH 키 존재 여부 확인
+터미널에서 이미 생성된 SSH 키가 있는지 확인한다.
 
+```bash
+% ls -la ~/.ssh
+```
+id_rsa.pub 또는 id_ed25519.pub 같은 파일이 있다면 기존 키를 재사용하거나 새로 만들 수 있다.
+
+2️⃣ 새로운 SSH 키 생성
+이메일 주소 본인 계정을 입력하여 새로운 Ed25519 알고리즘 기반의 SSH 키를 생성한다.
+
+```bash
+% ssh-keygen -t ed25519 -C "***@gmail.com"
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/sk/.ssh/id_ed25519):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/sk/.ssh/id_ed25519
+Your public key has been saved in /home/sk/.ssh/id_ed25519.pub
+The key fingerprint is:
+```
+파일 저장 위치를 물어보면 기본값(Enter)을 누른다.
+보안을 위한 비밀번호(Passphrase) 설정은 엔터를 눌러 건너뛸 수 있다.
+
+3️⃣ SSH 에이전트에 키 등록
+백그라운드에서 실행 중인 SSH 에이전트에 새로 만든 키를 추가한다.
+
+```bash
+# SSH 에이전트 실행
+% eval "$(ssh-agent -s)"
+Agent pid 3696
+# macOS의 경우 설정 파일(~/.ssh/config)에 키 자동 로드 설정 추가 (선택 사항)
+% ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+```
+
+4️⃣ GitHub에 공개키(Public Key) 등록
+공개키 내용을 클립보드에 복사한다.
+
+```bash
+% cat /home/sk/.ssh/id_ed25519.pub
+# macOS 기준
+% pbcopy < ~/.ssh/id_ed25519.pub
+```
+1.GitHub 웹사이트 우측 상단 프로필 클릭 -> Settings로 이동.
+2.좌측 메뉴에서 SSH and GPG keys를 클릭.
+3.New SSH key 버튼을 누른다.
+4.Title에 알아보기 쉬운 이름을 입력하고, Key 칸에 복사한 공개키를 붙여넣은 뒤 Add SSH key를 누른다.
+
+5️⃣ 연결 테스트
+정상적으로 연동되었는지 터미널에서 확인.
+
+```bash
+% ssh -T git@github.com
+Hi raffi0922! You've successfully authenticated, but GitHub does not provide shell access.
+```
+6️⃣ 리포지토리 원격 주소를 SSH로 변경
+기존 리포지토리의 원격 주소를 HTTPS에서 SSH로 변경합니다.
+
+```bash
+git remote set-url origin git@github.com:raffi0922/cds-w1-m1.git
+```
+
+✅ 배움 포인트
+- 인증 방식의 차이: HTTPS 방식은 푸시할 때마다 매번 아이디와 Personal Access Token(PAT)을 입력해야 하지만, SSH 방식은 공개키/개인키 암호화 방식을 통해 비밀번호 입력 없이 안전하고 빠르게 인증할 수 있다.
+- 보안 습관: 토큰 노출 위험을 줄이고 개발 생산성을 높이는 표준적인 원격 저장소 인증 방식을 익힐 수 있다.
+
+---
 
 ## 14. 트러블슈팅
 
-### 이슈 1
+### 14-1.이슈 1
 - 문제: `바인드 마운트 nginx 로컬파일 site/index.html 이 컨테이너에서 보이지 않음`
 ```bash
 % docker run -d -p 8080:80 --name my-mount-nginx -v ~/site:/usr/share/nginx/html nginx:alpine
@@ -849,38 +1096,61 @@ $ ls -la ~/site
 % cat ~/site/index.html
 ```
 
----
-
-### 이슈 2
-- 문제: `{{문제 설명}}`
-- 원인 가설: `{{원인 추정}}`
-- 확인 방법: `{{확인 명령}}`
-- 해결/대안: `{{해결 방법}}`
-
-```bash
-{{관련 로그}}
-```
+### 14-2. 이슈 2
+![14-2.hangul_broken.png](./screenshot/14-2.hangul_broken.png)
+- 문제: `Docker 환경에서 Nginx로 서빙 중인 웹페이지의 한글 텍스트가 깨져서 출력되는 현상`
+- 원인 가설: `HTML 파일의 문자 인코딩(Character Set)이 UTF-8로 지정되지 않았거나, 브라우저가 기본 인코딩으로 올바르게 해석하지 못함`
+- 확인 방법: `브라우저 개발자 도구의 네트워크 탭에서 응답 헤더의 Content-Type을 확인하거나, 웹페이지 화면에서 한글이 깨져 보이는지 확인`
+- 해결/대안: `index.html 파일의 <head> 태그 내부에 <meta charset="UTF-8"> 태그를 추가하여 브라우저가 UTF-8로 문자를 강제 렌더링하도록 설정`
 
 ---
 
 ## 15. 결과 정리
 
-이번 미션을 통해 다음을 이해했다.
+1️⃣ 절대 경로와 상대 경로의 차이
+- 절대 경로 (Absolute Path): 루트 디렉토리(/) 또는 드라이브 최상단에서부터 목적지까지 거치는 모든 경로를 빠짐없이 적는 방식입니다. (예: /Users/username/site/index.html) 현재 위치와 상관없이 언제나 고유한 경로를 가리킵니다.
+- 상대 경로 (Relative Path): 현재 자신이 위치한 작업 디렉토리를 기준(. 또는 ..)으로 목적지까지 찾아가는 경로입니다. (예: ./site/index.html 또는 ../site/index.html) 현재 위치가 바뀌면 경로가 가리키는 대상도 달라집니다.
 
-- 절대 경로와 상대 경로의 차이
-- 파일 권한(r/w/x)과 `755`, `644`의 의미
-- Dockerfile 기반 커스텀 이미지 제작 방법
-- 포트 매핑이 필요한 이유
-- Docker 볼륨의 영속성 개념
-- Git과 GitHub의 역할 차이
+2️⃣ 파일 권한 (r/w/x)과 755, 644의 의미
+
+리눅스 및 유닉스 계열 시스템에서는 파일과 디렉토리에 대해 소유자(User), 그룹(Group), 기타 사용자(Others) 단위로 접근 권한을 관리합니다.
+
+권한 종류:
+- r (Read, 읽기): 파일 내용 확인 또는 디렉토리 목록 조회
+- w (Write, 쓰기): 파일 수정, 생성, 삭제
+- x (Execute, 실행): 파일 실행 또는 디렉토리 내부 접근
+- 숫자 표기법 (755와 644): 권한을 r=4, w=2, x=1의 합산 숫자로 표현한다.
+- 755 (주로 디렉토리 또는 실행 파일): 소유자(7 = 4+2+1, 읽기/쓰기/실행), 그룹(5 = 4+1, 읽기/실행), 기타 사용자(5 = 4+1, 읽기/실행) 권한을 부여한다.
+- 644 (주로 일반 소스 파일, HTML 등): 소유자(6 = 4+2, 읽기/쓰기), 그룹(4, 읽기 전용), 기타 사용자(4, 읽기 전용) 권한을 부여한다.
+
+3️⃣ Dockerfile 기반 커스텀 이미지 제작 방법
+
+기본 이미지 위에 필요한 설정과 소스코드를 직접 패키징하여 나만의 커스텀 이미지를 만드는 과정.
+
+1) Dockerfile 작성: 프로젝트 루트에 Dockerfile을 생성하고 명령어(Instruction)를 작성합니다.
+2) FROM: 기반이 될 기본 이미지 지정 (예: nginx:alpine)
+3) COPY: 로컬의 파일이나 폴더를 컨테이너 내부로 복사
+4) RUN: 이미지 빌드 과정에서 실행할 명령어
+5) EXPOSE: 컨테이너가 대기할 포트 명시
+6) 이미지 빌드: 터미널에서 빌드 명령어를 실행합니다.
+```bash
+# 예시
+% docker build -t my-custom-image:latest .
+```
+
+4️⃣ 포트 매핑이 필요한 이유
+
+- 도커 컨테이너는 기본적으로 외부 네트워크와 격리된 독립된 가상 네트워크 환경(IP)을 가지고 실행.
+- 따라서 호스트(내 컴퓨터) 브라우저에서 컨테이너 내부의 웹 서버(예: 80번 포트)로 직접 접근할 수 없다.
+- 포트 매핑(-p 8080:80)은 호스트의 포트(8080)로 들어오는 요청을 컨테이너 내부의 포트(80)로 연결(포워딩)해 주어 외부에서 컨테이너 서비스에 접근할 수 있게 만드는 필수 장치.
+
+5️⃣ Docker 볼륨의 영속성 개념
+- 컨테이너의 비영속성: 도커 컨테이너 내부에서 생성되거나 수정된 파일은 컨테이너가 삭제(docker rm)되면 함께 사라진다.
+- 볼륨(Volume)의 영속성: 호스트 시스템의 디렉토리나 도커 관리 볼륨을 컨테이너 내부 경로와 연결(바인드 마운트 등)하면, 컨테이너가 삭제되어도 데이터는 호스트에 안전하게 보존된다. 이를 통해 데이터의 영속성(Persistence)을 보장하고 소스코드를 실시간으로 연동.
+
+6️⃣ Git과 GitHub의 역할 차이
+- Git (버전 관리 시스템, VCS): 로컬(내 컴퓨터)에서 소스 코드의 변경 이력(Commit)을 추적하고 관리하는 도구. 인터넷이 연결되지 않은 상태에서도 버전을 관리.
+
+- GitHub (원격 저장소 플랫폼): Git으로 관리되는 프로젝트와 이력들을 클라우드 서버에 업로드(push)하고, 다른 개발자와 협업, 코드 리뷰, 이슈 관리 등을 수행할 수 있도록 지원하는 웹 플랫폼 서비스.
 
 ---
-
-## 16. 첨부 자료
-
-- Dockerfile: `{{경로}}`
-- 웹 서버 소스코드: `{{경로}}`
-- 포트 매핑 접속 스크린샷: `{{경로}}`
-- 바인드 마운트 증거: `{{경로}}`
-- 볼륨 영속성 증거: `{{경로}}`
-- Git/GitHub 연동 증거: `{{경로}}`

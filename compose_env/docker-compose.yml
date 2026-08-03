@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    image: nginx:alpine
+    container_name: compose-env-web
+    volumes:
+      - ./:/usr/share/nginx/html
+    ports:
+      - "${SERVER_PORT}:80"
+    environment:
+      - NGINX_MODE=${APP_MODE}
+    # .env 파일을 자동으로 읽어오도록 지정
+    env_file:
+      - .env

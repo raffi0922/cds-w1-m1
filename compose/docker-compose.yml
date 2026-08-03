@@ -2,8 +2,10 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    image: nginx:alpine
     container_name: compose-web
     ports:
       - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html
     restart: unless-stopped
