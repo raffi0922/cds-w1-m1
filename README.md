@@ -24,28 +24,43 @@
 
 ### 버전 확인 명령
 ```bash
-uname -a
-echo $SHELL
-docker --version
-docker info
-git --version
-git config --list
-```
-
-### 결과
-```bash
 % uname -a
 Darwin /RELEASE_X86_64 x86_64
+```
+```bash
 % git --version
 git version 2.53.0
+```
+```bash
+% git config --list
+credential.helper=osxkeychain
+user.name=raffi0922
+user.email=*****@gmail.com
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=true
+remote.origin.url=https://github.com/raffi0922/cds-w1-m1.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+branch.main.vscode-merge-base=origin/main
+```
+```bash
 % docker --version
 Docker version 28.5.2, build ecc6942
+```
+```bash
 % echo $SHELL
 /bin/zsh
+```
+```bash
 % docker info
 Client:
- Version:    28.5.2
- Context:    orbstack
+Version:    28.5.2
+Context:    orbstack
 ```
 
 ---
@@ -81,7 +96,8 @@ Client:
 /Users/hyeonmo90922/proejct
 % ls
 README.md
-% ls -al
+# 숨김파일 포함
+% ls -al 
 total 24
 drwxr-xr-x   4 hyeonmo90922  hyeonmo90922   128  7 29 15:17 .
 drwxr-xr-x   5 hyeonmo90922  hyeonmo90922   160  7 29 15:41 ..
@@ -167,30 +183,26 @@ Client:
 ...(이하생략)
 ```
 
-### 6-2. 이미지 / 컨테이너 상태 확인
-```bash
-docker images
-docker ps
-docker ps -a
-```
-
-### 결과
-![image](./image/6-2_docker_check.png)
-
 ---
 
 ## 7. 컨테이너 실행 실습
 
-### 7-1. hello-world 실행
+### 7-1. hello-world 이미지 다운로드, 컨테이너 실행 및 내부 명령 실행
 
 ```bash
-% docker run hello-world
-Unable to find image 'hello-world:latest' locally
+# hello-world 이미지 다운로드
+% docker pull hello-world 
+Using default tag: latest
 latest: Pulling from library/hello-world
 4f55086f7dd0: Pull complete 
 Digest: sha256:c3cbe1cc1aa588a64951ac6286e0df7b27fe2e6324b1001c619bb358770c0178
 Status: Downloaded newer image for hello-world:latest
+docker.io/library/hello-world:latest
+```
 
+```bash
+# hello-world 컨테이너 실행 및 내부 명령 실행
+% docker run hello-world
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
 
@@ -211,121 +223,240 @@ Share images, automate workflows, and more with a free Docker ID:
 
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
-
-% docker images
-REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-hello-world   latest    e2ac70e7319a   4 months ago   10.1kB
 ```
 
-### 결과
-![image](./image/7-1.helloworld-image.png)
-
-
-### 7-2. ubuntu 컨테이너 실행 및 내부 명령 실행
+### 7-2. nginx:alpine 이미지 다운로드, 컨테이너 실행 및 내부 명령 실행
 ```bash
-% docker run -it --name my-ubuntu ubuntu:22.04 /bin/bash
-Unable to find image 'ubuntu:22.04' locally
-22.04: Pulling from library/ubuntu
-d6834b4a794c: Pull complete 
-Digest: sha256:0e0a0fc6d18feda9db1590da249ac93e8d5abfea8f4c3c0c849ce512b5ef8982
-Status: Downloaded newer image for ubuntu:22.04
-root@71f6c3e829a0:/# ls
-bin  boot  dev  etc  home  lib  lib32  lib64  libx32  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-root@71f6c3e829a0:/# echo "hello docker"
+# nginx:alpine 이미지 다운로드
+% docker pull nginx:alpine
+alpine: Pulling from library/nginx
+55afa1ecc21d: Pull complete 
+3cd534fe98c6: Pull complete 
+1223f016b4e4: Pull complete 
+62bec68d7c31: Pull complete 
+46f977ee452f: Pull complete 
+d0008c891db4: Pull complete 
+390dc935348d: Pull complete 
+46519e7231d2: Pull complete 
+Digest: sha256:4a73073bd557c65b759505da037898b61f1be6cbcc3c2c3aeac22d2a470c1752
+Status: Downloaded newer image for nginx:alpine
+docker.io/library/nginx:alpine
+```
+
+```bash
+# nginx:alpine 컨테이너 실행 및 내부 명령 실행
+% docker run -d -p 8080:80 --name my-nginx nginx:alpine
+22c9f60c5ca904dcf8a450c11bcd1808bcbb0c753eed83292f814067aa98c2c5
+```
+
+### 7-3. ubuntu 이미지 다운로드, 컨테이너 실행 및 내부 명령 실행
+```bash
+# ubuntu 이미지 다운로드
+ % docker pull ubuntu                                
+Using default tag: latest
+latest: Pulling from library/ubuntu
+ed819469700f: Pull complete 
+a3679419df18: Pull complete 
+Digest: sha256:3131b4cc82a783df6c9df078f86e01819a13594b865c2cad47bd1bca2b7063bb
+Status: Downloaded newer image for ubuntu:latest
+docker.io/library/ubuntu:latest
+```
+
+```bash
+# ubuntu 컨테이너 실행 및 내부 명령 실행
+hyeonmo90922@c6r4s8 cds-w1-m1 % docker run -it --name my-ubuntu ubuntu      
+root@da6e4695b9cc:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@da6e4695b9cc:/# echo "hello docker"
 hello docker
-% exit
+root@da6e4695b9cc:/# exit
+exit
 ```
 
-### 결과
-![image](./image/7.container_image.png)
+### 7-4. 이미지 / 컨테이너 상태 확인
+```bash
+% docker images                                     
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+nginx         alpine    f0ba77f796e5   2 weeks ago    62.4MB
+ubuntu        latest    de7345b16e94   2 weeks ago    100MB
+hello-world   latest    e2ac70e7319a   4 months ago   10.1kB
+% docker ps
+CONTAINER ID   IMAGE          COMMAND                   CREATED         STATUS         PORTS                                     NAMES
+22c9f60c5ca9   nginx:alpine   "/docker-entrypoint.…"   8 minutes ago   Up 8 minutes   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
+% docker ps -a                          
+CONTAINER ID   IMAGE          COMMAND                   CREATED         STATUS                          PORTS                                     NAMES
+da6e4695b9cc   ubuntu         "/bin/bash"               2 minutes ago   Exited (0) About a minute ago                                             my-ubuntu
+22c9f60c5ca9   nginx:alpine   "/docker-entrypoint.…"   8 minutes ago   Up 8 minutes                    0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
+```
 
-### 7-3. attach / exec / 종료 차이 메모
-`Docker Attach` 동작 방식: 컨테이너 내부의 1번 프로세스(PID 1) 표준 입출력(I/O)에 직접 연결
+### 7-5. attach / exec / 종료 차이 
+📌 개념 정리
+| 구분	| attach | exec |
+|---|---|---|
+| 목적	| 실행 중인 컨테이너의 표준입출력에 연결 |	컨테이너 내에서 새로운 프로세스 실행 |
+| 상호작용|	메인 프로세스와 직접 상호작용	| 독립적인 새 프로세스 실행 |
+| 종료 시|	메인 프로세스 종료 → 컨테이너 중지	| 새 프로세스만 종료 → 컨테이너 계속 실행 |
+| 사용 사례	|로그 실시간 확인, 포그라운드 프로세스 모니터링	| 디버깅, 명령 실행, 셸 접속 |
+| 위험도	| ⚠️ 높음 (실수로 종료 가능) |	✅ 안전함 |
 
-특징: 컨테이너가 처음 실행될 때 돌던 본래의 화면과 입력을 그대로 공유
 
-주의점: 여기서 Ctrl + C를 누르면 컨테이너 전체가 종료
+🔴 attach 사용 (위험한 방식)
 
-`Docker Exec` 동작 방식: 실행 중인 컨테이너 내부에서 새로운 프로세스(주로 /bin/bash 등 셸)를 새로 실행하여 접속
+1️⃣ nginx:alpine 컨테이너 실행
+```bash
+% docker start my-nginx                                
+my-nginx
+```
 
-특징: 기존 메인 프로세스에 영향을 주지 않고 안전하게 독립된 터미널 세션을 열 수 있습니다
+2️⃣ 컨테이너 상태 확인
+```bash
+% docker ps
+CONTAINER ID   IMAGE          COMMAND                   CREATED             STATUS         PORTS                                     NAMES
+22c9f60c5ca9   nginx:alpine   "/docker-entrypoint.…"   About an hour ago   Up 7 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
+```
 
-사용 목적: 주로 컨테이너 내부 상태를 확인하거나 디버깅용 셸을 띄울 때 사용합니다
+3️⃣ 컨테이너는 메인 프로세스 접속 후 중지
+```bash
+% docker attach my-nginx
+***.***.***.* - - [03/Aug/2026:06:40:59 +0000] "GET / HTTP/1.1" 200 896 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" "-"
+2026/08/03 06:41:00 [error] 23#23: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: ***.***.***.* server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
+***.***.***.* - - [03/Aug/2026:06:41:00 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" "-"
+# Ctrl+C를 누르면...
+^C2026/08/03 06:41:08 [notice] 1#1: signal 2 (SIGINT) received, exiting
+2026/08/03 06:41:08 [notice] 1#1: exit
+```
+
+4️⃣ ⚠️ 문제점 발생!
+```bash
+% docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+# 컨테이너가 사라짐! (중지됨)
+```
+attach로 메인 프로세스에 연결됨
+Ctrl+C를 누르면 메인 프로세스 자체가 종료됨
+메인 프로세스 종료 → 컨테이너 자동 중지
+
+
+
+🟢 exec 사용 (안전한 방식)
+1️⃣ nginx:alpine 컨테이너 다시 실행
+```bash
+% docker start my-nginx 
+my-nginx
+```
 
 ```bash
-# 먼저 백그라운드에서 계속 실행되는 우분투 컨테이너 시작
-% docker run -d --name ubuntu-running ubuntu:22.04 sleep infinity
-a35cb40f6248e4e60c538afca09ee175d532a2510a730a5ef8ebc29c713c6cef
-% docker ps
-CONTAINER ID   IMAGE          COMMAND            CREATED         STATUS         PORTS     NAMES
-a35cb40f6248   ubuntu:22.04   "sleep infinity"   2 minutes ago   Up 2 minutes             ubuntu-running
-^C
-SIGTERM/SIGINTs, forcefully exiting
-% docker ps
-CONTAINER ID   IMAGE          COMMAND            CREATED         STATUS         PORTS     NAMES
-a35cb40f6248   ubuntu:22.04   "sleep infinity"   6 minutes ago   Up 6 minutes             ubuntu-running
+% docker ps                                          
+CONTAINER ID   IMAGE          COMMAND                   CREATED       STATUS          PORTS                                     NAMES
+22c9f60c5ca9   nginx:alpine   "/docker-entrypoint.…"   2 hours ago   Up 2 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
 ```
-### 결과
-❓ 왜 컨테이너는 여전히 실행 중인가?
-- sleep 명령어는 SIGINT를 무시하도록 설계됨
-- Docker가 신호를 보냈지만 sleep은 반응 없음
-- attach 세션만 종료, 메인 프로세스는 계속 실행
-- docker ps 확인 → "Up 7 minutes" (계속 실행 중!)
+
+2️⃣ exec로 새 프로세스 실행 후 중지
+```bash
+ % docker exec my-nginx cat /var/log/nginx/access.log
+^C%   
+```
+
+3️⃣  컨테이너는 여전히 실행 중
+```bash
+% docker ps                                         
+CONTAINER ID   IMAGE          COMMAND                   CREATED       STATUS              PORTS                                     NAMES
+22c9f60c5ca9   nginx:alpine   "/docker-entrypoint.…"   2 hours ago   Up About a minute   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx
+# 상태: Up a minutes = 계속 실행 중! ✅
+```
 
 ---
 
 ## 8. Dockerfile 기반 커스텀 이미지
 
-### 8-1. 선택한 베이스 이미지
-- 베이스 이미지: `{{nginx / ubuntu:22.04}}`
+### 8-1. nginx 커스텀 베이스 이미지
+- 베이스 이미지: `nginx:alpine`
+이유: 경량(42.5MB), 보안 업데이트 빠름, 웹 서버 기본 기능 포함
+- 웹서버 `HTML 정적 파일 교체` `설정 파일 변경`
+- 리눅스 `환경변수 추가` `헬스체크 추가`
+
+### 8-2. 정적 콘텐츠 준비
+
 ```bash
-# 1. 이미지 다운로드
-% docker pull ubuntu:22.04
-% docker images
-REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-ubuntu        22.04     b8e6b596a324   4 weeks ago    78.1MB 
-
+% cat > site/index.html << 'EOF'
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+</html>
+EOF
+% cat site/index.html           
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
 ```
-
-
-### 8-2. 커스텀 포인트
-- `{{HTML 정적 파일 교체}}`
-- `{{설정 파일 변경}}`
-- `{{환경변수 추가}}`
-- `{{헬스체크 추가}}`
 
 ### 8-3. 프로젝트 구조
 ```bash
 project/
 ├── Dockerfile
-├── app/
+├── site/
 │   └── index.html
 └── README.md
 ```
 
 ### 8-4. Dockerfile
-```dockerfile
+```Dockerfile
+% cat > Dockerfile << 'EOF'
+FROM nginx:alpine
 
+LABEL org.opencontainers.image.title="my-custom-nginx"
+LABEL org.opencontainers.image.version="1.0"
+
+#환경 변수 설정
+ENV APP_ENV=development
+ENV NGINX_PORT=80
+
+#정적 콘텐츠 복사
+COPY site/ /usr/share/nginx/html/
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+EOF
 ```
+
+커스텀 포인트 설명:
+|항목|목적|
+|---|---|
+|FROM nginx:alpine	| 경량 웹 서버 베이스|
+|LABEL	| 이미지 메타데이터 추가|
+|ENV	| 환경 변수로 설정 외부화|
+|COPY site/|	호스트 콘텐츠를 컨테이너로 복사|
+|HEALTHCHECK|	컨테이너 상태 자동 감시|
+EXPOSE 80|	포트 문서화|
 
 ### 8-5. 빌드 명령
 ```bash
-docker build -t {{이미지이름}} .
+ % docker build -t my-custom-nginx:1.0 .
+[+] Building 1.8s (7/7) FINISHED                                                                              docker:orbstack
+...
+ => => naming to docker.io/library/my-custom-nginx:1.0 
 ```
 
-### 결과
 ```bash
-{{출력}}
+% docker images | grep my-custom-nginx
+my-custom-nginx   1.0       5df2d5102d4e   51 seconds ago   62.4MB
 ```
 
-### 8-6. 실행 명령
+### 8-6. 실행 명령 (포트 매핑) , 컨테이너 확인
 ```bash
-docker run -d --name {{컨테이너이름}} -p {{host_port}}:{{container_port}} {{이미지이름}}
+# 실행 명령 (포트 매핑)
+% docker run -d -p 8080:80 --name my-nginx-server my-custom-nginx:1.0
+6d75e498e0d8bd0ea5c894d84bd64b793b47156aeeac572a216c0cc3d7814e67
 ```
 
-### 결과
 ```bash
-{{출력}}
+# 컨테이너 확인
+% docker ps
+CONTAINER ID   IMAGE                 COMMAND                   CREATED          STATUS          PORTS                                     NAMES
+6d75e498e0d8   my-custom-nginx:1.0   "/docker-entrypoint.…"   16 seconds ago   Up 15 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx-server
 ```
 
 ---
@@ -334,95 +465,207 @@ docker run -d --name {{컨테이너이름}} -p {{host_port}}:{{container_port}} 
 
 ### 접속 확인 명령
 ```bash
-curl http://localhost:{{host_port}}
-```
-
-### 결과
-```bash
-{{출력}}
+% curl http://localhost:8080
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
 ```
 
 ### 브라우저 접속 증거
-- 접속 주소: `http://localhost:{{host_port}}`
-- 스크린샷 링크: `{{이미지 링크 또는 파일 경로}}`
-
+- 접속 주소: `http://localhost:8080`
+- ✅ 스크린샷  
+![브라우저 접속: http://localhost:8080](./screenshot/9.browser.png)
 ---
+
+### 로그 확인
+```bash
+% docker logs my-nginx-server
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+...
+***.***.***.* - - [03/Aug/2026:08:33:18 +0000] "GET / HTTP/1.1" 200 174 "-" "curl/8.7.1" "-"
+```
 
 ## 10. 바인드 마운트 검증
 
-### 10-1. 실행 명령
+
+### 10-1. site/html 정적 웹페이지 복사
 ```bash
-docker run -d --name {{컨테이너이름}} \
-  -p {{host_port}}:{{container_port}} \
-  -v {{호스트경로}}:{{컨테이너경로}} \
-  {{이미지이름}}
+% cd ~
+% cd mkdir site
+% cp project/cds-w1-m1/site/index.html site/index.html
+% cat ~/site/index.html
 ```
 
-### 10-2. 변경 전/후 비교
-호스트 파일 수정 전:
+### 10-2. nginx:alpine 실행 명령
 ```bash
-{{내용}}
+% dokcer start my-nginx
+```
+- 접속 주소: `http://localhost:8080`
+- ✅ 스크린샷 nginx 웹페이지 내용 확인  
+![브라우저 접속: http://localhost:8080](./screenshot/10-2.browser.png)
+
+### 10-3. 로컬 정적웹 마운트 컨테이너 실행 명령
+```bash
+% docker run -d -p 8080:80 --name my-mount-nginx -v ~/site:/usr/share/nginx/html nginx:alpine
+```
+- 접속 주소: `http://localhost:8080`
+- ✅ 스크린샷   ~/site/index.html 웹페이지 마운트 된 내용 확인
+![브라우저 접속: http://localhost:8080](./screenshot/10-3.browser.png)
+
+
+### 10-4. 컨테이너에서 마운트 확인
+```bash
+% docker exec my-mount-nginx ls -la /usr/share/nginx/html/
+total 4
+drwxr-xr-x    1 root     root            96 Aug  3 09:24 .
+drwxr-xr-x    1 root     root             8 Jul 15 23:31 ..
+-rw-r--r--    1 root     root           211 Aug  3 09:30 index.html
 ```
 
-호스트 파일 수정 후:
+### 10-4. 호스트 변경 전/ 후 확인
+호스트 파일 변경 전:
 ```bash
-{{내용}}
+# 컨테이너 확인
+% docker exec my-mount-nginx cat /usr/share/nginx/html/index.html
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+</html>%  
 ```
 
-컨테이너 반영 확인:
 ```bash
-{{명령}}
+# curl 확인
+% curl http://localhost:8080/ 
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+</html>%  
 ```
 
-### 결과
+호스트 파일 변경:
 ```bash
-{{출력}}
+% cat > site/index.html << 'EOF'
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+호스트파일을 추가로 수정했습니다.
+</html>
+EOF
+% cat site/index.html           
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+호스트파일을 추가로 수정했습니다.
 ```
+
+호스트 파일 변경 후:
+```bash
+# 컨테이너 확인
+% docker exec my-mount-nginx cat /usr/share/nginx/html/index.html
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+호스트파일을 추가로 수정했습니다.
+</html>%  
+```
+
+```bash
+# curl 확인
+% curl http://localhost:8080/ 
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+호스트파일을 추가로 수정했습니다.
+</html>%  
+```
+
+- 접속 주소: `http://localhost:8080`
+- ✅ 스크린샷 nginx 웹페이지 내용 확인Í
+![브라우저 접속: http://localhost:8080](./screenshot/10-4.browser.png)
 
 ---
 
 ## 11. Docker 볼륨 영속성 검증
 
+### 11-1. data/test.txt 파일 생성
+```bash
+% cd ~/project/cds-w1-m1
+% cd mkdir data
+% touch data/test.txt
+% cat data/test.txt
+```
+
 ### 11-1. 볼륨 생성
 ```bash
-docker volume create {{볼륨이름}}
-docker volume ls
+% docker volume create my-volume
+my-volume
+% docker volume ls
+DRIVER    VOLUME NAME
+local     my-volume
 ```
 
-### 결과
+### 11-2. 볼륨 상세 정보 확인
 ```bash
-{{출력}}
+% docker volume inspect my-volume
+[
+    {
+        "CreatedAt": "2026-08-03T20:34:42+09:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/my-volume/_data",
+        "Name": "my-volume",
+        "Options": null,
+        "Scope": "local"
+    }
+]
 ```
 
-### 11-2. 볼륨 연결 컨테이너 실행
+
+### 11-3. 볼륨 컨테이너 연결 실행 & 확인
 ```bash
-docker run -d --name {{컨테이너이름}} \
-  -v {{볼륨이름}}:{{컨테이너경로}} \
-  ubuntu sleep infinity
+% docker run -d --name volume-test -v my-volume:/data ubuntu sleep infinity
+7c17bc706fe2ced2bcbb288ee52625c77711b40ebbdea8d5261e0db4886838ca
+% docker ps
+CONTAINER ID   IMAGE     COMMAND            CREATED         STATUS         PORTS     NAMES
+7c17bc706fe2   ubuntu    "sleep infinity"   4 seconds ago   Up 4 seconds             volume-test
 ```
 
 ### 11-3. 데이터 저장 및 확인
 ```bash
-docker exec -it {{컨테이너이름}} bash -lc 'echo "hello" > {{컨테이너경로}}/test.txt && cat {{컨테이너경로}}/test.txt'
-```
-
-### 결과
-```bash
+% docker exec -it volume-test bash -lc 'echo "hello" > /data/test.txt && cat /data/test.txt'
 hello
 ```
 
-### 11-4. 컨테이너 삭제 후 재실행
+### 11-4. 볼륨 컨테이너 삭제 후 기존 볼륨 컨테이너 연결 후 실행
 ```bash
-docker rm -f {{컨테이너이름}}
-docker run -d --name {{새컨테이너이름}} \
-  -v {{볼륨이름}}:{{컨테이너경로}} \
-  ubuntu sleep infinity
-
-docker exec -it {{새컨테이너이름}} bash -lc 'cat {{컨테이너경로}}/test.txt'
+# 컨테이너 삭제 
+% docker rm -f volume-test
+volume-test
+% docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 
-### 결과
 ```bash
+# 볼륨 컨테이너 연결 
+% docker run -d --name volume-new -v my-volume:/data ubuntu sleep infinity
+b66bf8bd98cec6f9b21867328b718055e72dac22a1ecf3503b697a64deb06eaf
+% docker ps                                                               
+CONTAINER ID   IMAGE     COMMAND            CREATED         STATUS         PORTS     NAMES
+b66bf8bd98ce   ubuntu    "sleep infinity"   4 seconds ago   Up 3 seconds             volume-new
+# 데이터 확인
+% docker exec -it volume-new bash -lc 'cat /data/test.txt'
 hello
 ```
 
@@ -432,63 +675,178 @@ hello
 
 ### 12-1. Git 기본 설정
 ```bash
-git config --global user.name "{{이름}}"
-git config --global user.email "{{이메일}}"
-git config --global init.defaultBranch main
-git config --list
+% git config --global user.name "raffi0922"
+% git config --global user.email "***@gmail.com"
+% git config --global init.defaultBranch main
+% git config --list                        
+credential.helper=osxkeychain
+user.name=raffi0922
+user.email=***@gmail.com
+init.defaultbranch=main
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=true
+remote.origin.url=https://github.com/raffi0922/cds-w1-m1.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.main.remote=origin
+branch.main.merge=refs/heads/main
+branch.main.vscode-merge-base=origin/main
 ```
 
-### 결과
-```bash
-{{출력}}
-```
 
 ### 12-2. 저장소 연동
-- GitHub Repository: `{{저장소 링크}}`
+- GitHub Repository: `https://github.com/raffi0922/cds-w1-m1.git`
 - 원격 저장소 등록:
 ```bash
-git remote add origin {{저장소주소}}
-git remote -v
+% git remote add origin https://github.com/raffi0922/cds-w1-m1.git
+% git remote -v
+origin	https://github.com/raffi0922/cds-w1-m1.git (fetch)
+origin	https://github.com/raffi0922/cds-w1-m1.git (push)
 ```
 
-### 결과
+
+### 12-3. VSCode GitHub 로그인 연동 증거
+- VSCode GitHub 로그인 완료: `예`
+- VSCode Source Control 연동 확인: `예`
+- 스크린샷
+
+![vscode_github](./screenshot/12-3.vscode_github.png)
+
+
+---
+
+## 13 보너스 과제 (선택)
+
+### 13-1. Docker Compose 기초
+- `docker-compose.yml`의 기본 구조를 학습하고, 단일 서비스를 Compose로 실행한다.
+- 배움 포인트: 컨테이너 실행 명령이 “문서화된 실행 설정”으로 바뀌는 이유
+
 ```bash
-{{출력}}
+# 파일 생성
+% cat > docker-compose.yml << 'EOF'
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: compose-web
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+EOF
 ```
 
-### 12-3. VSCode 연동 증거
-- GitHub 로그인 완료: `{{예/아니오}}`
-- VSCode Source Control 연동 확인: `{{예/아니오}}`
-- 스크린샷 링크: `{{이미지 링크 또는 파일 경로}}`
+```bash
+# 컨테이너 실행
+ % docker-compose up -d
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Building 1.2s (9/9) FINISHED
+...
+ ✔ Container compose-web      Started   
+```
+
+```bash
+# 컨테이너 확인
+% docker ps        
+CONTAINER ID   IMAGE           COMMAND                   CREATED              STATUS              PORTS                                     NAMES
+cb5a0eb62405   cds-w1-m1-web   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   compose-web
+```
+
+```bash
+# 웹 서버 확인
+% curl http://localhost:8080/
+<html>
+<meta charset="UTF-8">
+🎉 NGINX 커스텀 이미지 성공!
+이것은 바인드 마운트로 반영된 콘텐츠입니다.
+호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+</html>%   
+```
+
+```bash
+# 로그 확인
+% docker-compose logs -f web
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+compose-web  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+```
+
+```bash
+# 컨테이너 중지
+% docker-compose down
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 2/2
+ ✔ Container compose-web      Removed                                                                                               0.4s 
+ ✔ Network cds-w1-m1_default  Removed
+% docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+📌 주요 개념
+version: Compose 파일 형식 버전 (3.8 = Docker 19.03+)
+services: 실행할 컨테이너들 정의
+build: Dockerfile 경로 지정
+ports: 포트 매핑 (호스트:컨테이너)
+restart: 재시작 정책 (unless-stopped = 수동 중지 전까지 재시작)
+
+📌 장점
+- ✅ 설정이 문서화됨
+- ✅ 재사용 가능
+- ✅ 버전 관리 가능
+
+### 13-2. Docker Compose 멀티 컨테이너
+- 웹 서버 + (임의의 보조 서비스) 2개 이상을 Compose로 함께 실행한다.
+- 컨테이너 간 네트워크 통신이 가능한지 확인한다.
+- 배움 포인트: 네트워크/서비스 디스커버리 개념 맛보기
+
+
+
+
+### 13-3. Compose 운영 명령어 습득
+- `up`, `down`, `ps`, `logs`를 사용해 실행/종료/상태/로그를 관리한다.
+- 배움 포인트: 운영 관점의 “상태 확인 루틴” 만들기
+
+### 13-4. 환경 변수 활용
+- Dockerfile 또는 Compose에서 환경 변수를 주입해 서버 포트/모드를 바꿔본다.
+- 배움 포인트: 설정과 코드의 분리
+
+### 13-5. GitHub SSH 키 설정
+- HTTPS 대신 SSH로 푸시가 가능하도록 키를 등록하고 동작을 확인한다.
+- 배움 포인트: 인증 방식 차이와 보안 습관
 
 ---
 
-## 13. 검증 방법 요약
-
-아래 명령으로 결과를 확인했다.
-
-- 디렉토리/파일 조작: `pwd`, `ls -la`, `mkdir`, `cp`, `mv`, `rm`
-- 권한 확인: `ls -l`, `chmod`
-- Docker 점검: `docker --version`, `docker info`
-- 컨테이너 실행: `docker run`, `docker ps`, `docker ps -a`
-- 로그 확인: `docker logs`, `docker stats`
-- 이미지 빌드: `docker build`
-- 접속 확인: `curl http://localhost:PORT`
-- 볼륨 확인: `docker volume ls`, `docker exec`
-- Git 설정: `git config --list`
-
----
 
 ## 14. 트러블슈팅
 
 ### 이슈 1
-- 문제: `{{문제 설명}}`
-- 원인 가설: `{{원인 추정}}`
-- 확인 방법: `{{확인 명령}}`
-- 해결/대안: `{{해결 방법}}`
-
+- 문제: `바인드 마운트 nginx 로컬파일 site/index.html 이 컨테이너에서 보이지 않음`
 ```bash
-{{관련 로그}}
+% docker run -d -p 8080:80 --name my-mount-nginx -v ~/site:/usr/share/nginx/html nginx:alpine
+```
+증상:
+호스트의 파일이 컨테이너에서 보이지 않음
+디렉토리는 마운트되었지만 파일이 없음
+권한 오류는 없음
+
+- 원인 가설: `호스트 경로가 존재하지 않음`
+- 확인 방법: `호스트 경로 확인`
+```bash
+$ ls -la ~/site
+```
+증상:
+파일이 없음
+계정 ~/site 경로로 연결해 놓고 
+/proejct/cds-w1-m1/site/index.html 에 연결된 걸로 착각
+
+- 해결/대안: `~/site/index.html 파일생성`
+```bash
+% cd ~
+% cd mkdir site
+% cp project/cds-w1-m1/site/index.html site/index.html
+% cat ~/site/index.html
 ```
 
 ---
@@ -505,15 +863,7 @@ git remote -v
 
 ---
 
-## 15. 보안 및 개인정보 보호
-
-- 토큰, 비밀번호, 개인키, 인증 코드는 README와 캡처에 포함하지 않았다.
-- 필요한 경우 민감정보는 `***`로 마스킹했다.
-- 공개 저장소에 올리기 전에 로그와 스크린샷을 재확인했다.
-
----
-
-## 16. 결과 정리
+## 15. 결과 정리
 
 이번 미션을 통해 다음을 이해했다.
 
@@ -526,7 +876,7 @@ git remote -v
 
 ---
 
-## 17. 첨부 자료
+## 16. 첨부 자료
 
 - Dockerfile: `{{경로}}`
 - 웹 서버 소스코드: `{{경로}}`
