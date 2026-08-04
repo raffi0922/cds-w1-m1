@@ -1,3 +1,0 @@
-docker: Error response from daemon: Conflict. The container name "/my-ubuntu" is already in use by container "71f6c3e829a0efb7c3a0af8dc0cb39fa9377a0d637ca8a1f215c8110319a47ca". You have to remove (or rename) that container to be able to reuse that name.
-
-Run 'docker run --help' for more information

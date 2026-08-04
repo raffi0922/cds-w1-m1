@@ -6,7 +6,7 @@ services:
     image: nginx:alpine
     container_name: app-web
     ports:
-      - "8080:80"
+      - "8083:80"
     volumes:
       - ./:/usr/share/nginx/html
     networks:

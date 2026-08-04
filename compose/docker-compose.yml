@@ -5,7 +5,7 @@ services:
     image: nginx:alpine
     container_name: compose-web
     ports:
-      - "8080:80"
+      - "8082:80"
     volumes:
       - ./:/usr/share/nginx/html
     restart: unless-stopped

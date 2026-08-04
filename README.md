@@ -1,5 +1,50 @@
 # 개발 워크스테이션 구축 미션
 
+## 목차
+
+1. [프로젝트 개요](#1.-프로젝트-개요)
+2. [실행 환경](#2.-실행-환경)
+3. [수행 체크리스트](#3.-수행-체크리스트)
+4. [터미널 조작 로그](#4.-터미널-조작-로그)
+5. [권한 실습](#5.-권한-실습)
+6. [Docker 설치 및 기본 점검](#6.-Docker-설치-및-기본-점검)
+7. [컨테이너 실행 실습](#7.-컨테이너-실행-실습)
+8. [Dockerfile 기반 커스텀 이미지](#8.-Dockerfile-기반-커스텀-이미지)
+9. [포트 매핑 접속 증거](#9.-포트-매핑-접속-증거)
+10. [바인드 마운트 검증](#10.-바인드-마운트-검증)
+11. [Docker 볼륨 영속성 검증](#11.-Docker-볼륨-영속성-검증)
+12. [Git 설정 및 GitHub 연동](#12.-Git-설정-및-GitHub-연동)
+13. [보너스 과제 (선택)](#13.-보너스-과제-(선택))
+14. [트러블슈팅](#14.-트러블슈팅)
+15. [결과 정리](#15.-결과-정리)
+
+## 프로젝트 파일 구조
+
+```bash
+cds-w1-mi/
+├── cody/
+│   └── cody1.txt
+│   └── cody1.txt
+├── compose/
+│   └── docker-compose.yml
+│   └── index.html
+├── compose_env/
+│   └── .env
+│   └── docker-compose.yml
+│   └── index.html
+├── compose_multi/
+│   └── docker-compose.yml
+│   └── index.html
+├── data/
+│   └── test.txt
+├── site/
+│   └── index.html
+├── .gitignore
+├── Dockerfile
+├── README.md
+└── empty.txt
+```
+
 ## 1. 프로젝트 개요
 
 이 프로젝트는 터미널, Docker, Git/GitHub를 활용해 개발 워크스테이션 환경을 직접 구성하고 검증한 기록입니다.
@@ -35,7 +80,7 @@ git version 2.53.0
 % git config --list
 credential.helper=osxkeychain
 user.name=raffi0922
-user.email=*****@gmail.com
+user.email=***@gmail.com
 core.repositoryformatversion=0
 core.filemode=true
 core.bare=false
@@ -61,30 +106,38 @@ Docker version 28.5.2, build ecc6942
 Client:
 Version:    28.5.2
 Context:    orbstack
+Debug Mode: false
+Plugins:
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.29.1
+    Path:     /Users/hyeonmo90922/.docker/cli-plugins/docker-buildx
+  compose: Docker Compose (Docker Inc.)
+    Version:  v2.40.3
+    Path:     /Users/hyeonmo90922/.docker/cli-plugins/docker-compose
 ```
 
 ---
 
 ## 3. 수행 체크리스트
 
-- [x] 현재 위치 확인 및 디렉토리 이동
-- [x] 파일/디렉토리 생성, 복사, 이동, 삭제
-- [x] 숨김 파일 확인
-- [x] 파일 내용 확인 및 빈 파일 생성
-- [x] 파일/디렉토리 권한 확인 및 변경
-- [x] Docker 버전 확인
-- [x] Docker 데몬 동작 확인
-- [x] `hello-world` 실행
-- [x] `ubuntu` 컨테이너 실행 및 내부 명령 확인
-- [x] Docker 이미지 목록 확인
-- [x] 컨테이너 실행/중지/목록 확인
-- [x] `docker logs`, `docker stats` 확인
-- [x] Dockerfile 기반 커스텀 이미지 빌드
-- [x] 포트 매핑 접속 확인
-- [x] 바인드 마운트 반영 확인
-- [x] Docker 볼륨 영속성 확인
-- [x] Git 사용자 정보/기본 브랜치 설정
-- [x] GitHub 저장소 연동
+- [o] 현재 위치 확인 및 디렉토리 이동
+- [o] 파일/디렉토리 생성, 복사, 이동, 삭제
+- [o] 숨김 파일 확인
+- [o] 파일 내용 확인 및 빈 파일 생성
+- [o] 파일/디렉토리 권한 확인 및 변경
+- [o] Docker 버전 확인
+- [o] Docker 데몬 동작 확인
+- [o] `hello-world` 실행
+- [o] `nginx:alpine` 컨테이너 실행 및 내부 명령 확인
+- [o] Docker 이미지 목록 확인
+- [o] 컨테이너 실행/중지/목록 확인
+- [o] `docker logs`, `docker ps` 확인
+- [o] Dockerfile 기반 커스텀 이미지 빌드
+- [o] 포트 매핑 접속 확인
+- [o] 바인드 마운트 반영 확인
+- [o] Docker 볼륨 영속성 확인
+- [o] Git 사용자 정보/기본 브랜치 설정
+- [o] GitHub 저장소 연동
 
 ---
 
@@ -92,8 +145,10 @@ Context:    orbstack
 
 ### 4-1. 현재 위치 확인 / 목록 확인
 ```bash
+# 현재위치
 % pwd
 /Users/hyeonmo90922/proejct
+# 목록
 % ls
 README.md
 # 숨김파일 포함
@@ -164,23 +219,44 @@ drwxr-xr-x  4 hyeonmo90922  hyeonmo90922  128  7 29 16:40 cody
 
 ## 6. Docker 설치 및 기본 점검
 
-### 6-1. 버전 확인
+
+### 6-1. OrbStack
+
+- OrbStack은 맥(macOS) 환경에서 도커(Docker) 컨테이너와 리눅스(Linux) 가상 머신을 매우 빠르고 가볍게 실행할 수 있다
+- 고성능 가상화 도구로, 뛰어난 속도, 적은 자원 사용량, 그리고 편리한 네트워크 기능을 제공
+
+📌 도커 이미지 (Image): 앱 실행에 필요한 파일과 설정이 들어 있는 읽기 전용 틀(템플릿)
+- 비유: 요리책의 레시피 또는 붕어빵 틀
+- 특징: 수정할 수 없고, 파일 형태로 저장되며 용량을 차지함\
+
+📌 도커 컨테이너 (Container): 이미지를 실행해 동작시키는 독립된 공간(런타임)
+- 비유: 레시피를 보고 실제로 만든 요리 또는 구워낸 붕어빵
+- 특징: 데이터를 바꾸거나 지워도 원래 이미지에는 영향을 주지 않음
+
+### 6-2. 설치 방법 
+홈브루(Homebrew)로 설치하기  
 ```bash
-% docker --version
-Docker version 28.5.2, build ecc6942
-% docker info     
-Client:
- Version:    28.5.2
- Context:    orbstack
- Debug Mode: false
- Plugins:
-  buildx: Docker Buildx (Docker Inc.)
-    Version:  v0.29.1
-    Path:     /Users/hyeonmo90922/.docker/cli-plugins/docker-buildx
-  compose: Docker Compose (Docker Inc.)
-    Version:  v2.40.3
-    Path:     /Users/hyeonmo90922/.docker/cli-plugins/docker-compose
-...(이하생략)
+% brew install orbstack
+```
+```bash
+# docker 데몬 학인
+% docker
+Usage:  docker [OPTIONS] COMMAND
+A self-sufficient runtime for containers
+...(생락)
+```
+
+### 6-3. docker 기본 명령
+```bash
+# 컨테이너
+% docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+# 이미지
+% docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+# 실행 중인 컨테이너의 CPU, 메모리, 네트워크, 디스크 I/O 등 실시간 리소스 사용량 통계 스트림
+% docker stats
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O   BLOCK I/O   PIDS
 ```
 
 ---
@@ -188,6 +264,8 @@ Client:
 ## 7. 컨테이너 실행 실습
 
 ### 7-1. hello-world 이미지 다운로드, 컨테이너 실행 및 내부 명령 실행
+
+-  hello-world 는 도커 설치 후 정상 작동 여부를 확인하기 위해 실행하는 기본 테스트용 컨테이너 이미지
 
 ```bash
 # hello-world 이미지 다운로드
@@ -200,9 +278,11 @@ Status: Downloaded newer image for hello-world:latest
 docker.io/library/hello-world:latest
 ```
 
+- -d의 옵션 의미: Detach(분리)의 약자로, 컨테이너를 터미널과 분리하여 백그라운드에서 실행하고 컨테이너 ID만 출력하도록 하는 옵션
+
 ```bash
 # hello-world 컨테이너 실행 및 내부 명령 실행
-% docker run hello-world
+% docker run -d --name my-web hello-world 
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
 
@@ -226,6 +306,7 @@ For more examples and ideas, visit:
 ```
 
 ### 7-2. nginx:alpine 이미지 다운로드, 컨테이너 실행 및 내부 명령 실행
+
 ```bash
 # nginx:alpine 이미지 다운로드
 % docker pull nginx:alpine
@@ -243,11 +324,17 @@ Status: Downloaded newer image for nginx:alpine
 docker.io/library/nginx:alpine
 ```
 
+
+- 도커에서 -p 8080:80과 같이 포트를 매핑할 때, 구조는 항상 -p [호스트 포트]:[컨테이너 포트] 형식을 따른다.
+- 호스트(Host)는 내 실제 컴퓨터(PC 또는 서버)를 의미하고, 컨테이너(Container)는 도커 안에서 독립적으로 실행되는 가상 공간을 의미한다.
+
 ```bash
 # nginx:alpine 컨테이너 실행 및 내부 명령 실행
 % docker run -d -p 8080:80 --name my-nginx nginx:alpine
 22c9f60c5ca904dcf8a450c11bcd1808bcbb0c753eed83292f814067aa98c2c5
 ```
+
+![nginx_alpine](./screenshot/7-2.nginx_alpine.png)
 
 ### 7-3. ubuntu 이미지 다운로드, 컨테이너 실행 및 내부 명령 실행
 ```bash
@@ -262,9 +349,12 @@ Status: Downloaded newer image for ubuntu:latest
 docker.io/library/ubuntu:latest
 ```
 
+- i (Interactive, 표준 입력 유지)컨테이너가 켜져 있는 동안 사용자의 키보드 입력(표준 입력, STDIN)을 계속 붙잡아 두고 컨테이너에 전달하는 역할.이 옵션이 없으면 명령어를 입력해도 컨테이너가 사용자의 입력을 받지 못합니다.
+- t (TTY, 가상 터미널 할당)리눅스 환경의 터미널 화면(가상 TTY)을 컨테이너 내부에 만들어 주는 역할.이 옵션 덕분에 터미널 화면에 알록달록한 색상이 나오고, 행 바꿈이 예쁘게 정렬되며, 명령어 자동 완성을 돕는 Tab 키나 이전 명령어를 보여주는 방향키(↑, ↓)를 사용할 수 있게 됩니다.
+
 ```bash
 # ubuntu 컨테이너 실행 및 내부 명령 실행
-hyeonmo90922@c6r4s8 cds-w1-m1 % docker run -it --name my-ubuntu ubuntu      
+% docker run -it --name my-ubuntu ubuntu      
 root@da6e4695b9cc:/# ls
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
 root@da6e4695b9cc:/# echo "hello docker"
@@ -318,15 +408,15 @@ CONTAINER ID   IMAGE          COMMAND                   CREATED             STAT
 3️⃣ 컨테이너는 메인 프로세스 접속 후 중지
 ```bash
 % docker attach my-nginx
-***.***.***.* - - [03/Aug/2026:06:40:59 +0000] "GET / HTTP/1.1" 200 896 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" "-"
-2026/08/03 06:41:00 [error] 23#23: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: ***.***.***.* server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
-***.***.***.* - - [03/Aug/2026:06:41:00 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost:8080/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" "-"
-# Ctrl+C를 누르면...
-^C2026/08/03 06:41:08 [notice] 1#1: signal 2 (SIGINT) received, exiting
-2026/08/03 06:41:08 [notice] 1#1: exit
+2026/08/04 05:21:49 [notice] 1#1: signal 28 (SIGWINCH) received
+2026/08/04 05:21:49 [notice] 1#1: signal 28 (SIGWINCH) received
+2026/08/04 05:21:49 [notice] 1#1: signal 28 (SIGWINCH) received
+2026/08/04 05:21:49 [notice] 1#1: signal 28 (SIGWINCH) received
+# Ctrl+C를 누르면...(생략)
+2026/08/04 05:22:40 [notice] 1#1: exit
 ```
 
-4️⃣ ⚠️ 문제점 발생!
+4️⃣ ⚠️ 컨테이너 체크!
 ```bash
 % docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
@@ -335,8 +425,6 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 attach로 메인 프로세스에 연결됨
 Ctrl+C를 누르면 메인 프로세스 자체가 종료됨
 메인 프로세스 종료 → 컨테이너 자동 중지
-
-
 
 🟢 exec 사용 (안전한 방식)
 1️⃣ nginx:alpine 컨테이너 다시 실행
@@ -372,24 +460,38 @@ CONTAINER ID   IMAGE          COMMAND                   CREATED       STATUS    
 ### 8-1. nginx 커스텀 베이스 이미지
 - 베이스 이미지: `nginx:alpine`
 이유: 경량(42.5MB), 보안 업데이트 빠름, 웹 서버 기본 기능 포함
+(선택)
 - 웹서버 `HTML 정적 파일 교체` `설정 파일 변경`
 - 리눅스 `환경변수 추가` `헬스체크 추가`
 
 ### 8-2. 정적 콘텐츠 준비
 
 ```bash
+# 생성
 % cat > site/index.html << 'EOF'
 <html>
-<meta charset="UTF-8">
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+</body>
 </html>
 EOF
+# 입력 확인
 % cat site/index.html           
-🎉 NGINX 커스텀 이미지 성공!
-이것은 바인드 마운트로 반영된 콘텐츠입니다.
-호스트에서 파일을 수정하면 실시간으로 반영됩니다.
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX 커스텀 이미지</title>
+</head>
+<body>
+<h1>🎉 NGINX 커스텀 이미지 성공!</h1>
+<p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
+</body>
+</html>
 ```
 
 ### 8-3. 프로젝트 구조
@@ -435,8 +537,10 @@ EXPOSE 80|	포트 문서화|
 ### 8-5. 빌드 명령
 ```bash
  % docker build -t my-custom-nginx:1.0 .
-[+] Building 1.8s (7/7) FINISHED                                                                              docker:orbstack
-...
+[+] Building 2.1s (7/7) FINISHED                                                docker:orbstack
+ => [internal] load build definition from Dockerfile                                       0.2s
+ => => transferring dockerfile: 330B   
+...(생략)
  => => naming to docker.io/library/my-custom-nginx:1.0 
 ```
 
@@ -457,7 +561,8 @@ my-custom-nginx   1.0       5df2d5102d4e   51 seconds ago   62.4MB
 % docker ps
 CONTAINER ID   IMAGE                 COMMAND                   CREATED          STATUS          PORTS                                     NAMES
 6d75e498e0d8   my-custom-nginx:1.0   "/docker-entrypoint.…"   16 seconds ago   Up 15 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx-server
-```
+```ß
+---
 
 ---
 
@@ -490,8 +595,8 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
-...
-***.***.***.* - - [03/Aug/2026:08:33:18 +0000] "GET / HTTP/1.1" 200 174 "-" "curl/8.7.1" "-"
+...(생략)
+***.***.***.* - - [04/Aug/2026:05:49:58 +0000] "GET / HTTP/1.1" 200 174 "-" "curl/8.7.1" "-"
 ```
 
 ## 10. 바인드 마운트 검증
@@ -515,11 +620,11 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 
 ### 10-3. 로컬 정적웹 마운트 컨테이너 실행 명령
 ```bash
-% docker run -d -p 8080:80 --name my-mount-nginx -v ~/site:/usr/share/nginx/html nginx:alpine
+% docker run -d -p 8081:80 --name my-mount-nginx -v ~/project/cds-w1-m1/site:/usr/share/nginx/html nginx:alpine
 ```
-- 접속 주소: `http://localhost:8080`
+- 접속 주소: `http://localhost:8081`
 - ✅ 스크린샷   ~/site/index.html 웹페이지 마운트 된 내용 확인
-![브라우저 접속: http://localhost:8080](./screenshot/10-3.browser.png)
+![브라우저 접속: http://localhost:8081](./screenshot/10-3.browser.png)
 
 
 ### 10-4. 컨테이너에서 마운트 확인
@@ -545,12 +650,12 @@ drwxr-xr-x    1 root     root             8 Jul 15 23:31 ..
 <h1>🎉 NGINX 커스텀 이미지 성공!</h1>
 <p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
 </body>
-</html>
+</html>%
 ```
 
 ```bash
 # curl 확인
-% curl http://localhost:8080/ 
+% curl http://localhost:8081/ 
 <html>
 <head>
     <meta charset="UTF-8">
@@ -560,7 +665,7 @@ drwxr-xr-x    1 root     root             8 Jul 15 23:31 ..
 <h1>🎉 NGINX 커스텀 이미지 성공!</h1>
 <p>이것은 바인드 마운트로 반영된 콘텐츠입니다.</p>
 </body>
-</html>
+</html>%
 ```
 
 호스트 파일 변경:
@@ -612,7 +717,7 @@ drwxr-xr-x    1 root     root             8 Jul 15 23:31 ..
 </html>
 ```
 
-- 접속 주소: `http://localhost:8080`
+- 접속 주소: `http://localhost:8081`
 - ✅ 스크린샷 nginx 웹페이지 내용 확인Í
 ![브라우저 접속: http://localhost:8080](./screenshot/10-4.browser.png)
 
@@ -652,7 +757,6 @@ local     my-volume
     }
 ]
 ```
-
 
 ### 11-3. 볼륨 컨테이너 연결 실행 & 확인
 ```bash
@@ -736,12 +840,13 @@ origin	https://github.com/raffi0922/cds-w1-m1.git (push)
 
 ---
 
-## 13 보너스 과제 (선택)
+## 13. 보너스 과제 (선택)
+1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟
 
 ### 13-1. Docker Compose 기초
 - `docker-compose.yml`의 기본 구조를 학습하고, 단일 서비스를 Compose로 실행한다.
 - 배움 포인트: 컨테이너 실행 명령이 “문서화된 실행 설정”으로 바뀌는 이유
-1️⃣2️⃣3️⃣4️⃣5️⃣6️⃣7️⃣8️⃣9️⃣🔟
+
 📌 주요 개념
 version: Compose 파일 형식 버전 (3.8 = Docker 19.03+)
 services: 실행할 컨테이너들 정의
@@ -783,7 +888,7 @@ services:
     image: nginx:alpine
     container_name: compose-web
     ports:
-      - "8080:80"
+      - "8082:80"
     volumes:
       - ./:/usr/share/nginx/html
     restart: unless-stopped
@@ -791,12 +896,15 @@ EOF
 ```
 
 3️⃣ 컨테이너 실행 및 확인
+
+- -d 옵션은 백그라운드(데몬) 모드로 컨테이너를 실행하라는 의미
+
 ```bash
 # 컨테이너 실행
  % ./docker-compose up -d
 WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
 [+] Building 1.2s (9/9) FINISHED
-...
+...(생략)
  ✔ Container compose-web      Started   
 ```
 
@@ -804,13 +912,13 @@ WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose/docker-compose.yml: the
 # 컨테이너 확인
 % docker ps        
 CONTAINER ID   IMAGE           COMMAND                   CREATED              STATUS              PORTS                                     NAMES
-cb5a0eb62405   cds-w1-m1-web   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   compose-web
+cb5a0eb62405   cds-w1-m1-web   "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8082->80/tcp, [::]:8082->80/tcp   compose-web
 ```
 
 4️⃣ 웹서버 확인  
 ```bash
 # 웹 서버 확인
-% curl http://localhost:8080/
+% curl http://localhost:8082/
 <html>
 <head>
     <meta charset="UTF-8">
@@ -822,10 +930,17 @@ cb5a0eb62405   cds-w1-m1-web   "/docker-entrypoint.…"   About a minute ago   U
 </body>
 </html>  
 ```
+
+- 접속 주소: `http://localhost:8082`
+- ✅ 스크린샷 nginx 웹페이지 내용 확인Í
+![브라우저 접속: http://localhost:8082](./screenshot/13-1.browser.png)
+
 5️⃣ 컨테이너 확인
 ```bash
 # 컨테이너 확인
 % docker-compose ps
+CONTAINER ID   IMAGE          COMMAND                   CREATED         STATUS         PORTS                                     NAMES
+2a0791ac56b2   nginx:alpine   "/docker-entrypoint.…"   3 seconds ago   Up 2 seconds   0.0.0.0:8082->80/tcp, [::]:8082->80/tcp   compose-web
 ```
 
 6️⃣ 로그 확인 
@@ -882,7 +997,7 @@ services:
     image: nginx:alpine
     container_name: app-web
     ports:
-      - "8080:80"
+      - "8083:80"
     volumes:
       - ./html:/usr/share/nginx/html
     networks:
@@ -907,33 +1022,64 @@ EOF
 ```bash
 # 컨테이너 실행
 % docker-compose up -d
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose_multi/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 2/2
+ ✔ Container app-web     Started                                                                                    0.5s 
+ ✔ Container app-helper  Started   
+
+# 컨테이너 확인
+ % docker ps
+CONTAINER ID   IMAGE           COMMAND                   CREATED         STATUS         PORTS                                     NAMES
+06f8a24a5462   nginx:alpine    "/docker-entrypoint.…"   3 seconds ago   Up 2 seconds   0.0.0.0:8083->80/tcp, [::]:8083->80/tcp   app-web
+d4af3d6affb5   alpine:latest   "tail -f /dev/null"       3 seconds ago   Up 2 seconds                                             app-helper
 ```
 
 4️⃣ 웹 서버 접속 확인
-- curl http://localhost:8080에 접속하여 Docker Compose 멀티 컨테이너 연동 성공! 메시지가 출력되는지 확인
+- curl http://localhost:8083에 접속하여 Docker Compose 멀티 컨테이너 연동 성공! 메시지가 출력되는지 확인
 ```bash
-% curl http://localhost:8080
+% curl http://localhost:8083
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX Compose multi컨테이너 </title>
+</head>
+<body>
+<h1>Docker Compose multi 컨테이너 연동 성공!</h1>
+<p>Nginx 웹 서버가 정상적으로 동작합니다.</p>
+</body>
+</html>%     
 ```
+
+- 접속 주소: `http://localhost:8083`
+- ✅ 스크린샷 nginx 웹페이지 내용 확인Í
+![브라우저 접속: http://localhost:8083](./screenshot/13-2.browser.png)
 
 5️⃣ 컨테이너 간 네트워크 통신 확인 (서비스 디스커버리)
 - Docker Compose는 기본적으로 같은 네트워크에 속한 컨테이너끼리 컨테이너 이름(서비스 이름)을 호스트 이름처럼 사용하여 통신
 - helper 컨테이너 내부로 접속하여 web 컨테이너로 통신(ping)이 잘 되는지 테스트
 
 ```bash
+# helper -> ping 신호 3번 web 
 % docker-compose exec helper ping -c 3 web
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose_multi/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+PING web (***.***.**.*): 56 data bytes
+64 bytes from ***.***.**.*: seq=0 ttl=64 time=0.052 ms
 ```
 
 6️⃣ 종료
 ```bash
 # 컨테이너 종료
 % docker-compose down
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose_multi/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 1/2
+ ✔ Container app-web     Removed                                                                                    0.3s 
+ ⠧ Container app-helper  Stopping                                                                                   7.8s 
+
+ % docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 ```
 
-### 13-3. Compose 운영 명령어 습득
-- `up`, `down`, `ps`, `logs`를 사용해 실행/종료/상태/로그를 관리한다.
-- 배움 포인트: 운영 관점의 “상태 확인 루틴” 만들기
-
-### 13-4. 환경 변수 활용
+### 13-3. 환경 변수 활용
 - Dockerfile 또는 Compose에서 환경 변수를 주입해 서버 포트/모드를 바꿔본다.
 - 배움 포인트: 설정과 코드의 분리
 
@@ -945,7 +1091,7 @@ EOF
 % cd compose_env
 % cat > .env << 'EOF'
 # 서버 포트 및 모드 설정
-SERVER_PORT=8081
+SERVER_PORT=8084
 APP_MODE=development
 EOF
 ```
@@ -976,23 +1122,67 @@ EOF
 
 ```bash
 %  docker-compose up -d
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose_env/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 2/2
+ ✔ Network compose_env_default  Created                                                                             0.1s 
+ ✔ Container compose-env-web    Started 
 ```
 
 4️⃣ 환경 변수 주입 확인
-- 포트 확인: .env 파일에 설정한 8090 포트로 브라우저에서 http://localhost:8081에 접속하여 Nginx 화면이 정상 출력되는지 확인.
+- 포트 확인: .env 파일에 설정한 8090 포트로 브라우저에서 http://localhost:8084에 접속하여 Nginx 화면이 정상 출력되는지 확인.
 - 컨테이너 내부 환경 변수 확인: 컨테이너 내부로 접속하여 주입된 환경 변수 값이 잘 들어왔는지 확인.
 
 ```bash
-% curl http://localhost:8081
-
-% docker-compose exec app env
+# index.html 확인
+% curl http://localhost:8084
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NGINX Compose ENV 컨테이너 </title>
+</head>
+<body>
+<h1>Docker Compose ENV 컨테이너 연동 성공!</h1>
+<p>Nginx 웹 서버가 정상적으로 동작합니다.</p>
+</body>
+</html>%  
 ```
+
+```bash
+# env 확인
+% docker-compose exec app env
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose_env/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=903db84cde51
+TERM=xterm
+NGINX_MODE=development
+SERVER_PORT=8084
+APP_MODE=development
+NGINX_VERSION=1.31.3
+PKG_RELEASE=1
+DYNPKG_RELEASE=1
+NJS_VERSION=1.0.0
+NJS_RELEASE=1
+ACME_VERSION=0.4.1
+HOME=/root
+```
+
+- 접속 주소: `http://localhost:8084`
+- ✅ 스크린샷 nginx 웹페이지 내용 확인Í
+![브라우저 접속: http://localhost:8084](./screenshot/13-3.browser.png)
+
 
 5️⃣ 종료
 - 실습이 끝난 후 컨테이너 종료
 ```bash
 % docker-compose down
+WARN[0000] /Users/hyeonmo90922/project/cds-w1-m1/compose_env/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] Running 2/2
+ ✔ Container compose-env-web    Removed                                                                             0.3s 
+ ✔ Network compose_env_default  Removed  
 ```
+### 13-4. Compose 운영 명령어 습득
+- `up`, `down`, `ps`, `logs`를 사용해 실행/종료/상태/로그를 관리한다.
+- 배움 포인트: 운영 관점의 “상태 확인 루틴” 만들기
 
 ### 13-5. GitHub SSH 키 설정
 - HTTPS 대신 SSH로 푸시가 가능하도록 키를 등록하고 동작을 확인한다.
@@ -1012,12 +1202,11 @@ id_rsa.pub 또는 id_ed25519.pub 같은 파일이 있다면 기존 키를 재사
 ```bash
 % ssh-keygen -t ed25519 -C "***@gmail.com"
 Generating public/private ed25519 key pair.
-Enter file in which to save the key (/home/sk/.ssh/id_ed25519):
-Enter passphrase (empty for no passphrase):
-Enter same passphrase again:
-Your identification has been saved in /home/sk/.ssh/id_ed25519
-Your public key has been saved in /home/sk/.ssh/id_ed25519.pub
-The key fingerprint is:
+Enter file in which to save the key (/Users/hyeonmo90922/.ssh/id_ed25519): 
+Enter passphrase for "/Users/hyeonmo90922/.ssh/id_ed25519" (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /Users/hyeonmo90922/.ssh/id_ed25519
+Your public key has been saved in /Users/hyeonmo90922/.ssh/id_ed25519.pub
 ```
 파일 저장 위치를 물어보면 기본값(Enter)을 누른다.
 보안을 위한 비밀번호(Passphrase) 설정은 엔터를 눌러 건너뛸 수 있다.
@@ -1028,7 +1217,7 @@ The key fingerprint is:
 ```bash
 # SSH 에이전트 실행
 % eval "$(ssh-agent -s)"
-Agent pid 3696
+Agent pid 50922
 # macOS의 경우 설정 파일(~/.ssh/config)에 키 자동 로드 설정 추가 (선택 사항)
 % ssh-add --apple-use-keychain ~/.ssh/id_ed25519
 ```
@@ -1037,7 +1226,7 @@ Agent pid 3696
 공개키 내용을 클립보드에 복사한다.
 
 ```bash
-% cat /home/sk/.ssh/id_ed25519.pub
+% cat /Users/hyeonmo90922/.ssh/id_ed25519.pub
 # macOS 기준
 % pbcopy < ~/.ssh/id_ed25519.pub
 ```
@@ -1046,19 +1235,44 @@ Agent pid 3696
 3.New SSH key 버튼을 누른다.
 4.Title에 알아보기 쉬운 이름을 입력하고, Key 칸에 복사한 공개키를 붙여넣은 뒤 Add SSH key를 누른다.
 
+
+- ✅ 스크린샷 github ssh 연동
+![깃허브 ssh 연동](./screenshot/13-5.github_ssh.png)
+
 5️⃣ 연결 테스트
 정상적으로 연동되었는지 터미널에서 확인.
 
 ```bash
 % ssh -T git@github.com
-Hi raffi0922! You've successfully authenticated, but GitHub does not provide shell access.
+Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+Hi raffi0922! You've successfully authenticated, but GitHub does not provide shell access
 ```
 6️⃣ 리포지토리 원격 주소를 SSH로 변경
 기존 리포지토리의 원격 주소를 HTTPS에서 SSH로 변경합니다.
 
 ```bash
-git remote set-url origin git@github.com:raffi0922/cds-w1-m1.git
+% git remote set-url origin git@github.com:raffi0922/cds-w1-m1.git
+% git remote -v
+origin	git@github.com:raffi0922/cds-w1-m1.git (fetch)
+origin	git@github.com:raffi0922/cds-w1-m1.git (push)
 ```
+
+(삭제할 경우)
+```bash
+#삭제 명령어
+# 공개키
+% rm /Users/hyeonmo90922/.ssh/id_ed25519.pub
+# 비밀키
+% rm /Users/hyeonmo90922/.ssh/id_ed25519
+```
+
+🔑 핵심 개념 이해하기
+- 공개키 (Public Key): 누구나 봐도 안전한 키입니다. 접속하려는 원격 서버에 저장됩니다.
+- 비밀키 (Private Key): 절대 남에게 보여주면 안 되는 키입니다. 내 맥스튜디오(로컬 PC)에 안전하게 보관됩니다.⚙️ SSH 연결 4단계 과정내가 맥스튜디오에서 서버로 접속을 요청하면 background에서 다음 과정이 순식간에 일어납니다.
+1. 접속 요청 (Hello)내 PC가 서버에 "나 hyeonmo90922인데 접속해줘"라고 요청합니다.이때 내 PC에 저장된 공개키의 ID(지문)를 서버에 함께 보냅니다.
+2. 자물쇠 확인 및 문제 출제 (Challenge)서버는 해당 사용자의 목록(authorized_keys)에서 일치하는 공개키(자물쇠)가 있는지 찾습니다.자물쇠가 있다면, 서버는 무작위 난수(임의의 문자열)를 생성합니다.서버는 이 난수를 공개키로 암호화하여 내 PC로 보냅니다. (이 암호문은 오직 쌍이 되는 비밀키로만 풀 수 있습니다.)
+3. 열쇠로 문제 풀기 (Response)내 PC는 서버가 보낸 암호문을 내 비밀키(열쇠)로 복호화(풀기)합니다.비밀키가 올바르다면 원래 서버가 보냈던 난수 문장 파일이 튀어나옵니다.내 PC는 이 풀어낸 난수 값을 바탕으로 암호화된 서명(Signature)을 만들어 서버로 다시 보냅니다.
+4. 인증 완료 (Success)서버는 내가 보낸 서명을 확인합니다.서버가 처음에 출제한 문제의 정답과 일치하면, 서버는 내 PC를 신뢰하고 안전한 연결 채널을 개방합니다
 
 ✅ 배움 포인트
 - 인증 방식의 차이: HTTPS 방식은 푸시할 때마다 매번 아이디와 Personal Access Token(PAT)을 입력해야 하지만, SSH 방식은 공개키/개인키 암호화 방식을 통해 비밀번호 입력 없이 안전하고 빠르게 인증할 수 있다.
