@@ -424,7 +424,7 @@ Ctrl+C를 누르면 메인 프로세스 자체가 종료됨
  % docker ps
 CONTAINER ID   IMAGE          COMMAND                   CREATED          STATUS          PORTS     NAMES
 2902ed04b87a   nginx:alpine   "/docker-entrypoint.…"   42 seconds ago   Up 41 seconds   80/tcp    my-nginx2
-```bash
+```
 
 
 🟢 exec 사용 (안전한 방식)
