@@ -417,6 +417,16 @@ attach로 메인 프로세스에 연결됨
 Ctrl+C를 누르면 메인 프로세스 자체가 종료됨
 메인 프로세스 종료 → 컨테이너 자동 중지
 
+-it 옵션으로 가상 터미널 할당
+```bash
+% docker run -it -d --name my-nginx2 nginx:alpine 
+2902ed04b87ac1dac61e83994d65e3c2f30c8c9d78086be7d79cedb4a73fe2f5
+ % docker ps
+CONTAINER ID   IMAGE          COMMAND                   CREATED          STATUS          PORTS     NAMES
+2902ed04b87a   nginx:alpine   "/docker-entrypoint.…"   42 seconds ago   Up 41 seconds   80/tcp    my-nginx2
+```bash
+
+
 🟢 exec 사용 (안전한 방식)
 1️⃣ nginx:alpine 컨테이너 다시 실행
 ```bash
