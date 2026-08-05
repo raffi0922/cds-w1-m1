@@ -620,7 +620,7 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 
 ### 10-3. 로컬 정적웹 마운트 컨테이너 실행 명령
 ```bash
-% docker run -d -p 8081:80 --name my-mount-nginx -v ~/project/cds-w1-m1/site:/usr/share/nginx/html nginx:alpine
+% docker run -d -p 8081:80 --name my-mount-nginx -v ~/cds-w1-m1/site:/usr/share/nginx/html nginx:alpine
 ```
 - 접속 주소: `http://localhost:8081`
 - ✅ 스크린샷   ~/site/index.html 웹페이지 마운트 된 내용 확인
