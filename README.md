@@ -535,6 +535,10 @@ EOF
 |COPY site/|	호스트 콘텐츠를 컨테이너로 복사|
 |HEALTHCHECK|	컨테이너 상태 자동 감시|
 EXPOSE 80|	포트 문서화|
+|CMD| 도커 이미지 빌드 후, 컨테이너가 시작될 때 기본적으로 실행할 명령어를 지정하는 지시어|
+nginx: 웹 서버 프로그램인 Nginx를 실행하는 메인 명령어  
+-g: Nginx의 전역 설정(Global configuration) 지시어를 외부에서 직접 주입하겠다는 옵션  
+daemon off: Nginx를 백그라운드(Daemon)가 아닌 사용자의 눈에 보이는 포그라운드(Foreground) 상태로 실행하라는 설정  
 
 ### 8-5. 빌드 명령
 ```bash
@@ -554,7 +558,7 @@ my-custom-nginx   1.0       5df2d5102d4e   51 seconds ago   62.4MB
 ### 8-6. 실행 명령 (포트 매핑) , 컨테이너 확인
 ```bash
 # 실행 명령 (포트 매핑)
-% docker run -d -p 8080:80 --name my-nginx-server my-custom-nginx:1.0
+% docker run -d -p 8079:80 --name my-nginx-server my-custom-nginx:1.0
 6d75e498e0d8bd0ea5c894d84bd64b793b47156aeeac572a216c0cc3d7814e67
 ```
 
@@ -562,8 +566,12 @@ my-custom-nginx   1.0       5df2d5102d4e   51 seconds ago   62.4MB
 # 컨테이너 확인
 % docker ps
 CONTAINER ID   IMAGE                 COMMAND                   CREATED          STATUS          PORTS                                     NAMES
-6d75e498e0d8   my-custom-nginx:1.0   "/docker-entrypoint.…"   16 seconds ago   Up 15 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-nginx-server
+6d75e498e0d8   my-custom-nginx:1.0   "/docker-entrypoint.…"   16 seconds ago   Up 15 seconds   0.0.0.0:8079->80/tcp, [::]:8079->80/tcp   my-nginx-server
 ```
+- 접속 주소: `http://localhost:8079`
+- ✅ 스크린샷   ~/site/index.html 웹페이지 8079 내용 확인
+![브라우저 접속: http://localhost:8079](./screenshot/8-6.browser.png)
+
 
 ---
 
@@ -603,11 +611,8 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 ## 10. 바인드 마운트 검증
 
 
-### 10-1. site/html 정적 웹페이지 복사
+### 10-1. site/html 정적 웹페이지 확인
 ```bash
-% cd ~
-% cd mkdir site
-% cp project/cds-w1-m1/site/index.html site/index.html
 % cat ~/site/index.html
 ```
 
