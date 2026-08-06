@@ -568,10 +568,6 @@ my-custom-nginx   1.0       5df2d5102d4e   51 seconds ago   62.4MB
 CONTAINER ID   IMAGE                 COMMAND                   CREATED          STATUS          PORTS                                     NAMES
 6d75e498e0d8   my-custom-nginx:1.0   "/docker-entrypoint.…"   16 seconds ago   Up 15 seconds   0.0.0.0:8079->80/tcp, [::]:8079->80/tcp   my-nginx-server
 ```
-- 접속 주소: `http://localhost:8079`
-- ✅ 스크린샷   ~/site/index.html 웹페이지 8079 내용 확인
-![브라우저 접속: http://localhost:8079](./screenshot/8-6.browser.png)
-
 
 ---
 
@@ -579,7 +575,7 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 
 ### 접속 확인 명령
 ```bash
-% curl http://localhost:8080
+% curl http://localhost:8079
 <html>
 <head>
     <meta charset="UTF-8">
@@ -593,9 +589,9 @@ CONTAINER ID   IMAGE                 COMMAND                   CREATED          
 ```
 
 ### 브라우저 접속 증거
-- 접속 주소: `http://localhost:8080`
+- 접속 주소: `http://localhost:8079`
 - ✅ 스크린샷  
-![브라우저 접속: http://localhost:8080](./screenshot/9.browser.png)
+![브라우저 접속: http://localhost:8079](./screenshot/9.browser.png)
 ---
 
 ### 로그 확인
